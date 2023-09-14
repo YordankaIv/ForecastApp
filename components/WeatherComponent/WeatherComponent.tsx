@@ -26,6 +26,7 @@ import style from './style';
 const WeatherComponent: React.FC<WeatherComponentProps> = ({
   locationData,
   refreshing,
+  getWeatherConditionId,
 }) => {
   const weatherInitialState = {
     name: '',
@@ -97,6 +98,7 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
       .then(response => response.json())
       .then(data => {
         setWeatherData(data);
+        getWeatherConditionId(data.weather[0].id);
         setIsLoading(false);
         setError(false);
       })

@@ -7,6 +7,10 @@ import {
   ScrollView,
 } from 'react-native';
 import {
+  BACKGROUNT_IMAGE_FOG_URI,
+  BACKGROUNT_IMAGE_RAIN_URI,
+  BACKGROUNT_IMAGE_SNOW_URI,
+  BACKGROUNT_IMAGE_STORM_URI,
   BACKGROUNT_IMAGE_URI,
   ERROR_LOCATION_TEXT,
   ERROR_MESSAGE,
@@ -20,12 +24,37 @@ import style from './style';
 const Home: React.FC = () => {
   const locationInitialState = {lat: '', lon: ''};
   const [locationData, setLocationData] = useState(locationInitialState);
+  const [backgroundImageURI, setBackgroundImageURI] =
+    useState(BACKGROUNT_IMAGE_URI);
   const [error, setError] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
 
   useEffect(() => {
     getCurrentLocation();
   }, []);
+
+  const getWeatherConditionId = (id: number) => {
+    switch (id.toString()[0]) {
+      case '8':
+        setBackgroundImageURI(BACKGROUNT_IMAGE_URI);
+        break;
+      case '7':
+        setBackgroundImageURI(BACKGROUNT_IMAGE_FOG_URI);
+        break;
+      case '6':
+        setBackgroundImageURI(BACKGROUNT_IMAGE_SNOW_URI);
+        break;
+      case '5':
+      case '3':
+        setBackgroundImageURI(BACKGROUNT_IMAGE_RAIN_URI);
+        break;
+      case '2':
+        setBackgroundImageURI(BACKGROUNT_IMAGE_STORM_URI);
+        break;
+      default:
+        setBackgroundImageURI(BACKGROUNT_IMAGE_URI);
+    }
+  };
 
   const getCurrentLocation = async () => {
     await fetch(IP_GEOLOCATION_URL)
@@ -52,7 +81,7 @@ const Home: React.FC = () => {
     <SafeAreaView style={style.flex}>
       <ImageBackground
         source={{
-          uri: BACKGROUNT_IMAGE_URI,
+          uri: backgroundImageURI,
         }}
         resizeMode={'cover'}
         style={style.image}>
@@ -64,6 +93,7 @@ const Home: React.FC = () => {
           contentContainerStyle={style.container}>
           {locationData.lat && (
             <WeatherComponent
+              getWeatherConditionId={getWeatherConditionId}
               locationData={locationData}
               refreshing={refreshing}
             />

@@ -21,6 +21,9 @@ const style = StyleSheet.create({
     fontSize: scaleFontSize(20),
     fontWeight: '600',
     color: '#ffffff',
+    textShadowColor: '#131212',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 2,
     paddingVertical: verticalScale(12),
     marginBottom: verticalScale(20),
     borderBottomWidth: 1,
@@ -41,6 +44,9 @@ const style = StyleSheet.create({
     fontWeight: '500',
     lineHeight: 19,
     color: '#ffffff',
+    textShadowColor: '#131212',
+    textShadowOffset: {width: 0, height: 0},
+    textShadowRadius: 2,
     textAlign: 'center',
   },
   weatherDescriptionDetails: {
@@ -68,6 +74,9 @@ const style = StyleSheet.create({
     fontSize: scaleFontSize(16),
     fontWeight: '600',
     color: '#ffffff',
+    textShadowColor: '#131212',
+    textShadowOffset: {width: 0, height: 0},
+    textShadowRadius: 2,
   },
 });
 

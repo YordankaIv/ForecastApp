@@ -14,10 +14,13 @@ const style = StyleSheet.create({
   },
   location: {
     fontFamily: 'Raleway',
-    fontSize: scaleFontSize(15),
+    fontSize: scaleFontSize(17),
     marginRight: verticalScale(5),
-    fontWeight: '400',
+    fontWeight: '700',
     color: '#ffffff',
+    textShadowColor: '#131212',
+    textShadowOffset: {width: 0, height: 0},
+    textShadowRadius: 2,
   },
   tempDetailsContainer: {
     flex: 1,
@@ -26,9 +29,12 @@ const style = StyleSheet.create({
   },
   tempDetails: {
     fontFamily: 'Raleway',
-    fontSize: scaleFontSize(12),
-    fontWeight: '400',
+    fontSize: scaleFontSize(14),
+    fontWeight: '700',
     color: '#ffffff',
+    textShadowColor: '#131212',
+    textShadowOffset: {width: 0, height: 0},
+    textShadowRadius: 2,
     marginRight: verticalScale(10),
   },
   changeUnitContainer: {
@@ -37,9 +43,12 @@ const style = StyleSheet.create({
   },
   changeUnit: {
     fontFamily: 'Raleway',
-    fontSize: scaleFontSize(12),
-    fontWeight: '400',
-    color: '#2979F2',
+    fontSize: scaleFontSize(16),
+    fontWeight: '700',
+    color: '#0f56c2',
+    textShadowColor: '#000000',
+    textShadowOffset: {width: 0, height: 0},
+    textShadowRadius: 2,
   },
   errorContainer: {
     marginVertical: verticalScale(30),

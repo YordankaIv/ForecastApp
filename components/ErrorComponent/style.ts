@@ -20,6 +20,9 @@ const style = StyleSheet.create({
     fontWeight: '500',
     lineHeight: 19,
     color: '#ffffff',
+    textShadowColor: '#131212',
+    textShadowOffset: {width: 0, height: 0},
+    textShadowRadius: 2,
     textAlign: 'center',
   },
   error: {

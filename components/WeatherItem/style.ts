@@ -11,7 +11,7 @@ const style = StyleSheet.create({
     height: verticalScale(100),
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 127, 255, 0.4)',
+    backgroundColor: 'rgba(0, 127, 255, 0.2)',
     borderRadius: horizontalScale(20),
   },
   descriptionLabel: {

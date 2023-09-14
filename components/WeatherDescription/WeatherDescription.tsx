@@ -40,7 +40,7 @@ const WeatherDescription: React.FC<WeatherDescriptionProps> = ({
     </View>
     <Pressable onPress={() => handlePress()} style={style.changeUnitContainer}>
       <Text style={style.changeUnit}>
-        {CHANGE_UNIT_TEXT} {unit === CELSIUS_UNIT ? CELSIUS : FAHRENHEIT}
+        {CHANGE_UNIT_TEXT} {unit === CELSIUS_UNIT ? FAHRENHEIT : CELSIUS}
       </Text>
     </Pressable>
   </View>

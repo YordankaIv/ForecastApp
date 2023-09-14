@@ -12,6 +12,9 @@ const style = StyleSheet.create({
     fontSize: scaleFontSize(50),
     fontWeight: '600',
     color: '#ffffff',
+    textShadowColor: '#131212',
+    textShadowOffset: {width: 0, height: 0},
+    textShadowRadius: 2,
   },
   imageContainer: {
     flex: 1,
@@ -27,6 +30,9 @@ const style = StyleSheet.create({
     fontSize: scaleFontSize(20),
     fontWeight: '400',
     color: '#ffffff',
+    textShadowColor: '#131212',
+    textShadowOffset: {width: 0, height: 0},
+    textShadowRadius: 2,
   },
 });
 
