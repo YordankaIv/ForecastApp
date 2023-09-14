@@ -28,10 +28,11 @@ const guidelineBaseFonts = () => {
   return 400;
 };
 
-const horizontalScale = size => (width / guidelineBaseWidth()) * size;
+const horizontalScale = (size: number) => (width / guidelineBaseWidth()) * size;
 
-const verticalScale = size => (height / guidelineBaseHeight()) * size;
+const verticalScale = (size: number) => (height / guidelineBaseHeight()) * size;
 
-const scaleFontSize = size => Math.round((size * width) / guidelineBaseFonts());
+const scaleFontSize = (size: number) =>
+  Math.round((size * width) / guidelineBaseFonts());
 
 export {horizontalScale, verticalScale, scaleFontSize};
