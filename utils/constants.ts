@@ -8,6 +8,8 @@ export const OPEN_WEATHER_MAP_URL =
 
 export const CELSIUS_UNIT = 'metric';
 export const FAHRENHEIT_UNIT = 'imperial';
+export const CELSIUS = 'CELSIUS';
+export const FAHRENHEIT = 'FAHRENHEIT';
 export const CELSIUS_LETTER = 'ºC';
 export const FAHRENHEIT_LETTER = 'ºF';
 export const M_S_METRIC = 'm/s';

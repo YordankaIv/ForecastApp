@@ -53,20 +53,13 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
     getCurrentWeather(unit);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [unit]);
+  }, [unit, refreshing]);
 
   useEffect(() => {
-    setWeatherData({...weatherData});
     prepareWeatherDetails();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [weatherData.wind]);
-
-  useEffect(() => {
-    getCurrentWeather(unit);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refreshing]);
 
   const prepareWeatherDetails = () => {
     const weatherValues = {
@@ -105,9 +98,11 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
       .then(data => {
         setWeatherData(data);
         setIsLoading(false);
+        setError(false);
       })
       .catch(err => {
         Alert.alert(ERROR_MESSAGE + err);
+        setIsLoading(true);
         setError(true);
       });
   };
@@ -119,7 +114,7 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
           {error ? (
             <ErrorComponent
               errorText={ERROR_FORECAST_TEXT}
-              onPress={unitMetric => getCurrentWeather(unitMetric)}
+              onPress={() => getCurrentWeather(unit)}
             />
           ) : (
             <View style={style.indicatorContainer}>

@@ -5,7 +5,6 @@ import {
   RefreshControl,
   SafeAreaView,
   ScrollView,
-  Text,
 } from 'react-native';
 import {
   BACKGROUNT_IMAGE_URI,
@@ -19,7 +18,8 @@ import ErrorComponent from '../../components/ErrorComponent/ErrorComponent';
 import style from './style';
 
 const Home: React.FC = () => {
-  const [locationData, setLocationData] = useState({lat: '', lon: ''});
+  const locationInitialState = {lat: '', lon: ''};
+  const [locationData, setLocationData] = useState(locationInitialState);
   const [error, setError] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -27,28 +27,25 @@ const Home: React.FC = () => {
     getCurrentLocation();
   }, []);
 
-  useEffect(() => {
-    getCurrentLocation();
-  }, [locationData.lat]);
-
   const getCurrentLocation = async () => {
     await fetch(IP_GEOLOCATION_URL)
       .then(response => response.json())
       .then(data => {
         const {lat, lon} = data;
         setLocationData({lat, lon});
+        setError(false);
       })
       .catch(err => {
+        setLocationData(locationInitialState);
         Alert.alert(ERROR_MESSAGE + err);
         setError(true);
-      });
+      })
+      .finally(() => setRefreshing(false));
   };
 
-  const onRefresh = () => {
+  const onRefresh = async () => {
     setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1000);
+    await getCurrentLocation();
   };
 
   return (

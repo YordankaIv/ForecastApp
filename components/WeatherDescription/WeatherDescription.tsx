@@ -1,6 +1,12 @@
 import React from 'react';
 import {Pressable, Text, View} from 'react-native';
-import {CELSIUS_UNIT, CHANGE_UNIT_TEXT, TEMP_TEXT} from '../../utils/constants';
+import {
+  CELSIUS,
+  CELSIUS_UNIT,
+  CHANGE_UNIT_TEXT,
+  FAHRENHEIT,
+  TEMP_TEXT,
+} from '../../utils/constants';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faLocationDot} from '@fortawesome/free-solid-svg-icons';
 import {WeatherDescriptionProps} from '../../types/WeatherTypes';
@@ -34,7 +40,7 @@ const WeatherDescription: React.FC<WeatherDescriptionProps> = ({
     </View>
     <Pressable onPress={() => handlePress()} style={style.changeUnitContainer}>
       <Text style={style.changeUnit}>
-        {CHANGE_UNIT_TEXT} {unit === CELSIUS_UNIT ? 'CELSIUS' : 'FAHRENHEIT'}
+        {CHANGE_UNIT_TEXT} {unit === CELSIUS_UNIT ? CELSIUS : FAHRENHEIT}
       </Text>
     </Pressable>
   </View>

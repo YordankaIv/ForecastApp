@@ -11,7 +11,7 @@ type WeatherDetails = {
 
 export type ErrorComponentProps = {
   errorText: string;
-  onPress?: (unit: string) => Promise<void>;
+  onPress?: () => Promise<void>;
 };
 
 export type Weather = {
