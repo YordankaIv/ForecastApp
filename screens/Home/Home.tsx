@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
+import axios from 'axios';
 import {
-  Alert,
   ImageBackground,
   RefreshControl,
   SafeAreaView,
@@ -13,25 +13,38 @@ import {
   BACKGROUNT_IMAGE_STORM_URI,
   BACKGROUNT_IMAGE_URI,
   ERROR_LOCATION_TEXT,
-  ERROR_MESSAGE,
   IP_GEOLOCATION_URL,
 } from '../../utils/constants';
+import {useQuery} from 'react-query';
 import WeatherComponent from '../../components/WeatherComponent/WeatherComponent';
 import ErrorComponent from '../../components/ErrorComponent/ErrorComponent';
 
 import style from './style';
 
+export function useUserRefresh<T>(refetch: () => Promise<T>) {
+  const [refreshing, setRefreshing] = useState(false);
+  const handleRefresh = useCallback(() => {
+    setRefreshing(true);
+    refetch().then(() => setRefreshing(false));
+  }, []);
+  return {refreshing, handleRefresh};
+}
+
 const Home: React.FC = () => {
-  const locationInitialState = {lat: '', lon: ''};
-  const [locationData, setLocationData] = useState(locationInitialState);
   const [backgroundImageURI, setBackgroundImageURI] =
     useState(BACKGROUNT_IMAGE_URI);
-  const [error, setError] = useState(false);
-  const [refreshing, setRefreshing] = React.useState(false);
 
-  useEffect(() => {
-    getCurrentLocation();
-  }, []);
+  const getLocation = async () => {
+    const {data} = await axios.get(IP_GEOLOCATION_URL);
+    return data;
+  };
+
+  const {isSuccess, isError, data, refetch} = useQuery({
+    queryKey: 'location',
+    queryFn: getLocation,
+  });
+
+  const {refreshing, handleRefresh} = useUserRefresh(refetch);
 
   const getWeatherConditionId = (id: number) => {
     switch (id.toString()[0]) {
@@ -56,27 +69,6 @@ const Home: React.FC = () => {
     }
   };
 
-  const getCurrentLocation = async () => {
-    await fetch(IP_GEOLOCATION_URL)
-      .then(response => response.json())
-      .then(data => {
-        const {lat, lon} = data;
-        setLocationData({lat, lon});
-        setError(false);
-      })
-      .catch(err => {
-        setLocationData(locationInitialState);
-        Alert.alert(ERROR_MESSAGE + err);
-        setError(true);
-      })
-      .finally(() => setRefreshing(false));
-  };
-
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await getCurrentLocation();
-  };
-
   return (
     <SafeAreaView style={style.flex}>
       <ImageBackground
@@ -87,18 +79,18 @@ const Home: React.FC = () => {
         style={style.image}>
         <ScrollView
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }
           showsVerticalScrollIndicator={false}
           contentContainerStyle={style.container}>
-          {locationData.lat && (
+          {isError && <ErrorComponent errorText={ERROR_LOCATION_TEXT} />}
+          {isSuccess && (
             <WeatherComponent
               getWeatherConditionId={getWeatherConditionId}
-              locationData={locationData}
+              locationData={{lat: data.lat, lon: data.lon}}
               refreshing={refreshing}
             />
           )}
-          {error ? <ErrorComponent errorText={ERROR_LOCATION_TEXT} /> : null}
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>

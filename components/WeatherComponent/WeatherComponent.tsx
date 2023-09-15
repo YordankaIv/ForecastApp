@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import moment from 'moment';
-import {ActivityIndicator, Alert, Text, View} from 'react-native';
+import {ActivityIndicator, Text, View} from 'react-native';
 import {
   CELSIUS_UNIT,
   DATE_TIME_FORMAT,
   ERROR_FORECAST_TEXT,
-  ERROR_MESSAGE,
   FAHRENHEIT_UNIT,
   M_S_METRIC,
   OPEN_WEATHER_MAP_APP_ID,
@@ -13,12 +12,14 @@ import {
   PERCENT_METRIC,
   TIME_FORMAT,
 } from '../../utils/constants';
-import {WeatherComponentProps, Weather} from '../../types/WeatherTypes';
+import {WeatherComponentProps} from '../../types/WeatherTypes';
 import WeatherItem from '../WeatherItem/WeatherItem';
 import {weatherDetailsConstants} from '../../utils/weatherConstants';
 import WeatherHeader from '../WeatherHeader/WeatherHeader';
 import WeatherDescription from '../WeatherDescription/WeatherDescription';
 import ErrorComponent from '../ErrorComponent/ErrorComponent';
+import axios from 'axios';
+import {useQuery} from 'react-query';
 import 'react-native-url-polyfill/auto';
 
 import style from './style';
@@ -28,49 +29,47 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
   refreshing,
   getWeatherConditionId,
 }) => {
-  const weatherInitialState = {
-    name: '',
-    main: {},
-    weather: [],
-    coord: {},
-    wind: {},
-    clouds: {},
-    sys: {},
-    dt: 0,
-  };
-
   const openWeatherMap = new URL(OPEN_WEATHER_MAP_URL);
-  const [error, setError] = useState(false);
-  const [weatherData, setWeatherData] = useState<Weather>(weatherInitialState);
-  const [isLoading, setIsLoading] = useState(true);
   const [unit, setUnit] = useState(CELSIUS_UNIT);
-
   const [weatherDetails, setWeatherDetails] = useState(weatherDetailsConstants);
   const [weatherDetailsValues, setWeatherDetailsValues] = useState<
     Record<string, string>
   >({wind: '', humidity: '', sunrise: '', sunset: '', cloudiness: ''});
 
+  const getCurrentWeather = async () => {
+    const locationParams = {
+      lat: locationData.lat,
+      lon: locationData.lon,
+      units: unit,
+      appid: OPEN_WEATHER_MAP_APP_ID,
+    };
+    openWeatherMap.search = new URLSearchParams(locationParams).toString();
+
+    const url = openWeatherMap.toString();
+    const {data} = await axios.get(url);
+    getWeatherConditionId(data.weather[0].id);
+    prepareWeatherDetails();
+    return data;
+  };
+
+  const {isFetching, isError, data, refetch} = useQuery({
+    queryKey: 'weather',
+    queryFn: getCurrentWeather,
+  });
+
   useEffect(() => {
-    getCurrentWeather(unit);
+    refetch();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unit, refreshing]);
 
-  useEffect(() => {
-    prepareWeatherDetails();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [weatherData.wind]);
-
   const prepareWeatherDetails = () => {
     const weatherValues = {
-      wind: weatherData.wind.speed + M_S_METRIC,
-      humidity: weatherData.main.humidity + PERCENT_METRIC,
-      sunrise: moment
-        .unix(weatherData.sys.sunrise as number)
-        .format(TIME_FORMAT),
-      sunset: moment.unix(weatherData.sys.sunset as number).format(TIME_FORMAT),
-      cloudiness: weatherData.clouds.all + PERCENT_METRIC,
+      wind: data.wind.speed + M_S_METRIC,
+      humidity: data.main.humidity + PERCENT_METRIC,
+      sunrise: moment.unix(data.sys.sunrise as number).format(TIME_FORMAT),
+      sunset: moment.unix(data.sys.sunset as number).format(TIME_FORMAT),
+      cloudiness: data.clouds.all + PERCENT_METRIC,
     };
 
     setWeatherDetailsValues(weatherValues);
@@ -79,44 +78,16 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
   const handleChangeOfUnit = () => {
     const newUnit = unit === CELSIUS_UNIT ? FAHRENHEIT_UNIT : CELSIUS_UNIT;
     setUnit(newUnit);
-    setIsLoading(true);
-    getCurrentWeather(newUnit);
-  };
-
-  const getCurrentWeather = async (currentUnit: string) => {
-    const locationParams = {
-      lat: locationData.lat,
-      lon: locationData.lon,
-      units: currentUnit,
-      appid: OPEN_WEATHER_MAP_APP_ID,
-    };
-    openWeatherMap.search = new URLSearchParams(locationParams).toString();
-
-    const url = openWeatherMap.toString();
-
-    await fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        setWeatherData(data);
-        getWeatherConditionId(data.weather[0].id);
-        setIsLoading(false);
-        setError(false);
-      })
-      .catch(err => {
-        Alert.alert(ERROR_MESSAGE + err);
-        setIsLoading(true);
-        setError(true);
-      });
   };
 
   return (
     <View>
-      {isLoading || refreshing ? (
+      {isFetching || refreshing ? (
         <View style={style.infoContainer}>
-          {error ? (
+          {isError ? (
             <ErrorComponent
               errorText={ERROR_FORECAST_TEXT}
-              onPress={() => getCurrentWeather(unit)}
+              onPress={() => refetch() as unknown as Promise<void>}
             />
           ) : (
             <View style={style.indicatorContainer}>
@@ -128,12 +99,12 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
         <View>
           <View>
             <Text style={style.dateAndTime}>
-              {moment.unix(weatherData.dt).format(DATE_TIME_FORMAT)}
+              {moment.unix(data.dt).format(DATE_TIME_FORMAT)}
             </Text>
           </View>
-          <WeatherHeader weatherData={weatherData} unit={unit} />
+          <WeatherHeader weatherData={data} unit={unit} />
           <WeatherDescription
-            weatherData={weatherData}
+            weatherData={data}
             unit={unit}
             handlePress={handleChangeOfUnit}
           />
