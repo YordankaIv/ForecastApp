@@ -12,7 +12,7 @@ import {
   PERCENT_METRIC,
   TIME_FORMAT,
 } from '../../utils/constants';
-import {WeatherComponentProps} from '../../types/WeatherTypes';
+import {Weather, WeatherComponentProps} from '../../types/WeatherTypes';
 import WeatherItem from '../WeatherItem/WeatherItem';
 import {weatherDetailsConstants} from '../../utils/weatherConstants';
 import WeatherHeader from '../WeatherHeader/WeatherHeader';
@@ -48,7 +48,8 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
     const url = openWeatherMap.toString();
     const {data} = await axios.get(url);
     getWeatherConditionId(data.weather[0].id);
-    prepareWeatherDetails();
+    prepareWeatherDetails(data);
+
     return data;
   };
 
@@ -63,13 +64,15 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unit, refreshing]);
 
-  const prepareWeatherDetails = () => {
+  const prepareWeatherDetails = (weatherData: Weather) => {
     const weatherValues = {
-      wind: data.wind.speed + M_S_METRIC,
-      humidity: data.main.humidity + PERCENT_METRIC,
-      sunrise: moment.unix(data.sys.sunrise as number).format(TIME_FORMAT),
-      sunset: moment.unix(data.sys.sunset as number).format(TIME_FORMAT),
-      cloudiness: data.clouds.all + PERCENT_METRIC,
+      wind: weatherData.wind.speed + M_S_METRIC,
+      humidity: weatherData.main.humidity + PERCENT_METRIC,
+      sunrise: moment
+        .unix(weatherData.sys.sunrise as number)
+        .format(TIME_FORMAT),
+      sunset: moment.unix(weatherData.sys.sunset as number).format(TIME_FORMAT),
+      cloudiness: weatherData.clouds.all + PERCENT_METRIC,
     };
 
     setWeatherDetailsValues(weatherValues);
