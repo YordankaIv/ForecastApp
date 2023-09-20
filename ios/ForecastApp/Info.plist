@@ -72,5 +72,11 @@
 		<string>Raleway-Thin.ttf</string>
 		<string>Raleway-ThinItalic.ttf</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>...</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>...</string>
+	 <key>NSLocationAlwaysUsageDescription</key>
+    <string>...</string>
 </dict>
 </plist>

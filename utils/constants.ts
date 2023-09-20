@@ -9,7 +9,6 @@ export const BACKGROUNT_IMAGE_RAIN_URI =
   'https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1935&q=80';
 export const BACKGROUNT_IMAGE_STORM_URI =
   'https://images.unsplash.com/photo-1527482797697-8795b05a13fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80';
-export const IP_GEOLOCATION_URL = 'http://ip-api.com/json/';
 export const OPEN_WEATHER_MAP_APP_ID = '93d2128f315957e0bb248b11265d6115';
 export const OPEN_WEATHER_MAP_URL =
   'http://api.openweathermap.org/data/2.5/weather';
@@ -30,3 +29,15 @@ export const CHANGE_UNIT_TEXT = 'Switch to: ';
 export const TEMP_TEXT = 'Feels like';
 export const ERROR_LOCATION_TEXT = 'Error occured with finding your location';
 export const ERROR_FORECAST_TEXT = 'Error occured with getting forecast data';
+
+export const REQUEST_LOCATION_DIALOG_TITLE = 'Geolocation Permission';
+export const REQUEST_LOCATION_DIALOG_MESSAGE =
+  'Can the app access your location?';
+export const REQUEST_LOCATION_DIALOG_BUTTON_NEUTRAL = 'Ask Me Later';
+export const REQUEST_LOCATION_DIALOG_BUTTON_NEGATIVE = 'Cancel';
+export const REQUEST_LOCATION_DIALOG_BUTTON_POSITIVE = 'OK';
+
+export const ALERT_DIALOG_TITLE = 'Location Permission Required';
+export const ALERT_DIALOG_MESSAGE =
+  'App needs access to your location. Please go to app settings and grant permission.';
+export const ALERT_DIALOG_BUTTON_SETTINGS = 'Open Settings';

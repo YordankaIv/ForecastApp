@@ -1,5 +1,4 @@
 import React, {useCallback, useState} from 'react';
-import axios from 'axios';
 import {
   ImageBackground,
   RefreshControl,
@@ -13,11 +12,14 @@ import {
   BACKGROUNT_IMAGE_STORM_URI,
   BACKGROUNT_IMAGE_URI,
   ERROR_LOCATION_TEXT,
-  IP_GEOLOCATION_URL,
 } from '../../utils/constants';
 import {useQuery} from 'react-query';
 import WeatherComponent from '../../components/WeatherComponent/WeatherComponent';
 import ErrorComponent from '../../components/ErrorComponent/ErrorComponent';
+import Geolocation, {
+  GeolocationResponse,
+} from '@react-native-community/geolocation';
+import {requestLocationPermission} from '../../utils/utils';
 
 import style from './style';
 
@@ -34,12 +36,18 @@ const Home: React.FC = () => {
   const [backgroundImageURI, setBackgroundImageURI] =
     useState(BACKGROUNT_IMAGE_URI);
 
+  const getPosition = () =>
+    new Promise<GeolocationResponse>((resolve, reject) => {
+      Geolocation.getCurrentPosition(resolve, reject);
+    });
+
   const getLocation = async () => {
-    const {data} = await axios.get(IP_GEOLOCATION_URL);
+    await requestLocationPermission();
+    const data = await getPosition();
     return data;
   };
 
-  const {isSuccess, isError, data, refetch} = useQuery({
+  const {isSuccess, isError, data, refetch, error} = useQuery({
     queryKey: 'location',
     queryFn: getLocation,
   });
@@ -83,11 +91,18 @@ const Home: React.FC = () => {
           }
           showsVerticalScrollIndicator={false}
           contentContainerStyle={style.container}>
-          {isError && <ErrorComponent errorText={ERROR_LOCATION_TEXT} />}
+          {isError && (
+            <ErrorComponent
+              errorText={error ? (error as Error).message : ERROR_LOCATION_TEXT}
+            />
+          )}
           {isSuccess && (
             <WeatherComponent
               getWeatherConditionId={getWeatherConditionId}
-              locationData={{lat: data.lat, lon: data.lon}}
+              locationData={{
+                lat: (data as GeolocationResponse).coords.latitude,
+                lon: (data as GeolocationResponse).coords.longitude,
+              }}
               refreshing={refreshing}
             />
           )}

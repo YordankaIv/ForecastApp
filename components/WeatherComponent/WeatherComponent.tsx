@@ -38,8 +38,8 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
 
   const getCurrentWeather = async () => {
     const locationParams = {
-      lat: locationData.lat,
-      lon: locationData.lon,
+      lat: locationData.lat.toString(),
+      lon: locationData.lon.toString(),
       units: unit,
       appid: OPEN_WEATHER_MAP_APP_ID,
     };

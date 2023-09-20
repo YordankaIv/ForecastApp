@@ -1,7 +1,7 @@
 import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
 
 export type WeatherComponentProps = {
-  locationData: {lat: string; lon: string};
+  locationData: {lat: number; lon: number};
   refreshing: boolean;
   getWeatherConditionId: (id: number) => void;
 };
