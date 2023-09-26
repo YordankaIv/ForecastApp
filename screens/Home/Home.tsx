@@ -1,5 +1,6 @@
-import React, {useCallback, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
+  AppState,
   ImageBackground,
   RefreshControl,
   SafeAreaView,
@@ -19,22 +20,19 @@ import ErrorComponent from '../../components/ErrorComponent/ErrorComponent';
 import Geolocation, {
   GeolocationResponse,
 } from '@react-native-community/geolocation';
-import {requestLocationPermission} from '../../utils/utils';
+import {
+  checkLocationPermission,
+  requestLocationPermission,
+} from '../../utils/utils';
+import {useRefresh} from '../../hooks/common/useRefresh';
 
 import style from './style';
-
-export function useUserRefresh<T>(refetch: () => Promise<T>) {
-  const [refreshing, setRefreshing] = useState(false);
-  const handleRefresh = useCallback(() => {
-    setRefreshing(true);
-    refetch().then(() => setRefreshing(false));
-  }, []);
-  return {refreshing, handleRefresh};
-}
 
 const Home: React.FC = () => {
   const [backgroundImageURI, setBackgroundImageURI] =
     useState(BACKGROUNT_IMAGE_URI);
+
+  const appState = useRef(AppState.currentState);
 
   const getPosition = () =>
     new Promise<GeolocationResponse>((resolve, reject) => {
@@ -42,7 +40,11 @@ const Home: React.FC = () => {
     });
 
   const getLocation = async () => {
-    await requestLocationPermission();
+    const result = await checkLocationPermission();
+    if (!result) {
+      await requestLocationPermission();
+    }
+
     const data = await getPosition();
     return data;
   };
@@ -52,7 +54,26 @@ const Home: React.FC = () => {
     queryFn: getLocation,
   });
 
-  const {refreshing, handleRefresh} = useUserRefresh(refetch);
+  const {refreshing, handleRefresh} = useRefresh(refetch);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      //minimized and re-opened
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        // check Permission and get location again
+        refetch();
+      }
+
+      appState.current = nextAppState;
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [refetch]);
 
   const getWeatherConditionId = (id: number) => {
     switch (id.toString()[0]) {

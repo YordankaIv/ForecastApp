@@ -27,6 +27,13 @@ const openSettings = () => {
   Linking.openSettings();
 };
 
+export const checkLocationPermission = async () => {
+  const result = await PermissionsAndroid.check(
+    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  );
+  return result;
+};
+
 export const requestLocationPermission = async () => {
   try {
     const result = await PermissionsAndroid.request(

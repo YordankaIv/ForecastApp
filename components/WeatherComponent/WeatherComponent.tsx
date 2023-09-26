@@ -53,16 +53,14 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
     return data;
   };
 
-  const {isFetching, isError, data, refetch} = useQuery({
+  const {isFetching, isError, error, data, refetch} = useQuery({
     queryKey: 'weather',
     queryFn: getCurrentWeather,
   });
 
   useEffect(() => {
     refetch();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [unit, refreshing]);
+  }, [unit, refreshing, refetch]);
 
   const prepareWeatherDetails = (weatherData: Weather) => {
     const weatherValues = {
@@ -89,7 +87,7 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
         <View style={style.infoContainer}>
           {isError ? (
             <ErrorComponent
-              errorText={ERROR_FORECAST_TEXT}
+              errorText={error ? (error as Error).message : ERROR_FORECAST_TEXT}
               onPress={() => refetch() as unknown as Promise<void>}
             />
           ) : (
