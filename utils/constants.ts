@@ -41,3 +41,7 @@ export const ALERT_DIALOG_TITLE = 'Location Permission Required';
 export const ALERT_DIALOG_MESSAGE =
   'App needs access to your location. Please go to app settings and grant permission.';
 export const ALERT_DIALOG_BUTTON_SETTINGS = 'Open Settings';
+
+export const OFFLINE_PAGE_HEADER = 'Oh NO!';
+export const OFFLINE_PAGE_DESCRIPTION =
+  ' No Internet connection found. Please check your internet settings.';
