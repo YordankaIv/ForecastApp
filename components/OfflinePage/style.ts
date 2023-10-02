@@ -36,6 +36,21 @@ const style = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  button: {
+    borderWidth: 2,
+    borderColor: '#2979F2',
+    paddingHorizontal: horizontalScale(30),
+    paddingVertical: verticalScale(12),
+    justifyContent: 'center',
+    borderRadius: horizontalScale(50),
+  },
+  title: {
+    fontFamily: 'Raleway',
+    fontSize: scaleFontSize(20),
+    fontWeight: '500',
+    color: '#2979F2',
+    textAlign: 'center',
+  },
 });
 
 export default style;
