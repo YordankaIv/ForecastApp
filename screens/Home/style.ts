@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {horizontalScale} from '../../assets/styles/scaling';
+import {horizontalScale, verticalScale} from '../../assets/styles/scaling';
 
 const style = StyleSheet.create({
   image: {
@@ -11,6 +11,7 @@ const style = StyleSheet.create({
   },
   container: {
     marginHorizontal: horizontalScale(24),
+    marginTop: verticalScale(40),
   },
 });
 
