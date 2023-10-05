@@ -1,7 +1,7 @@
 import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
 
 export type WeatherComponentProps = {
-  locationData: {lat: number; lon: number};
+  location: {lat: number; lon: number};
   refreshing: boolean;
   getWeatherConditionId: (id: number) => void;
 };
@@ -12,7 +12,7 @@ type WeatherDetails = {
 
 export type ErrorComponentProps = {
   errorText: string;
-  onPress?: () => Promise<void>;
+  onRefreshPress?: () => void;
 };
 
 export type Weather = {
@@ -27,14 +27,14 @@ export type Weather = {
 };
 
 export type WeatherHeaderProps = {
-  weatherData: Weather;
+  weather: Weather;
   unit: string;
 };
 
 export type WeatherDescriptionProps = {
-  weatherData: Weather;
+  weather: Weather;
   unit: string;
-  handlePress: () => void;
+  onChangeUnit: () => void;
 };
 
 export type WeatherItemProps = {

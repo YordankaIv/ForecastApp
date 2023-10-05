@@ -4,6 +4,7 @@ import {
   scaleFontSize,
   verticalScale,
 } from '../../assets/styles/scaling';
+import {Colors} from '../../utils/colorsContants';
 
 const style = StyleSheet.create({
   descriptionContainer: {
@@ -18,13 +19,13 @@ const style = StyleSheet.create({
     fontFamily: 'Raleway',
     fontSize: scaleFontSize(16),
     fontWeight: '600',
-    color: '#ffffff',
+    color: Colors.white,
   },
   descriptionValue: {
     fontFamily: 'Raleway',
     fontSize: scaleFontSize(14),
     fontWeight: '400',
-    color: '#ffffff',
+    color: Colors.white,
   },
 });
 

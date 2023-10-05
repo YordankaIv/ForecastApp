@@ -4,18 +4,19 @@ import {REFRESH_BUTTON} from '../../utils/constants';
 import {ErrorComponentProps} from '../../types/WeatherTypes';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faWarning} from '@fortawesome/free-solid-svg-icons';
+import {Colors} from '../../utils/colorsContants';
 
 import style from './style';
 
 const ErrorComponent: React.FC<ErrorComponentProps> = ({
   errorText,
-  onPress,
+  onRefreshPress,
 }) => (
   <View style={style.errorContainer}>
-    <FontAwesomeIcon icon={faWarning} size={30} color={'#FF0000'} />
+    <FontAwesomeIcon icon={faWarning} size={30} color={Colors.red} />
     <Text style={style.error}>{errorText}</Text>
-    {onPress && (
-      <Pressable onPress={() => onPress()} style={style.button}>
+    {onRefreshPress && (
+      <Pressable onPress={() => onRefreshPress()} style={style.button}>
         <Text style={style.title}>{REFRESH_BUTTON}</Text>
       </Pressable>
     )}

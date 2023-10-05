@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {horizontalScale, scaleFontSize} from '../../assets/styles/scaling';
+import {Colors} from '../../utils/colorsContants';
 
 const style = StyleSheet.create({
   weatherContainer: {
@@ -11,8 +12,8 @@ const style = StyleSheet.create({
     fontFamily: 'Raleway',
     fontSize: scaleFontSize(50),
     fontWeight: '600',
-    color: '#ffffff',
-    textShadowColor: '#131212',
+    color: Colors.white,
+    textShadowColor: Colors.white,
     textShadowOffset: {width: 0, height: 0},
     textShadowRadius: 2,
   },
@@ -29,8 +30,8 @@ const style = StyleSheet.create({
     fontFamily: 'Raleway',
     fontSize: scaleFontSize(20),
     fontWeight: '400',
-    color: '#ffffff',
-    textShadowColor: '#131212',
+    color: Colors.white,
+    textShadowColor: Colors.white,
     textShadowOffset: {width: 0, height: 0},
     textShadowRadius: 2,
   },

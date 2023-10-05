@@ -23,7 +23,7 @@ export const M_S_METRIC = 'm/s';
 export const PERCENT_METRIC = '%';
 export const TIME_FORMAT = 'LT';
 export const DATE_TIME_FORMAT = 'LLL';
-export const ERROR_MESSAGE = 'Eror has occured:';
+export const ERROR_MESSAGE = 'Error has occured:';
 export const REFRESH_BUTTON = 'Refresh';
 export const CHANGE_UNIT_TEXT = 'Switch to: ';
 export const TEMP_TEXT = 'Feels like';
@@ -45,3 +45,6 @@ export const ALERT_DIALOG_BUTTON_SETTINGS = 'Open Settings';
 export const OFFLINE_PAGE_HEADER = 'Oh NO!';
 export const OFFLINE_PAGE_DESCRIPTION =
   ' No Internet connection found. Please check your internet settings.';
+export const OFFLINE_ALERT = 'You are still offline!';
+export const ONLINE_ALERT = 'You are back online!';
+export const OFFLINE_PAGE_BUTTON = 'Retry';

@@ -4,6 +4,7 @@ import {
   scaleFontSize,
   verticalScale,
 } from '../../assets/styles/scaling';
+import {Colors} from '../../utils/colorsContants';
 
 const style = StyleSheet.create({
   flex: {
@@ -20,13 +21,13 @@ const style = StyleSheet.create({
     fontFamily: 'Raleway',
     fontSize: scaleFontSize(25),
     fontWeight: '600',
-    color: '#000000',
+    color: Colors.black,
   },
   description: {
     fontFamily: 'Raleway',
     fontSize: scaleFontSize(15),
     fontWeight: '400',
-    color: '#000000',
+    color: Colors.black,
     marginTop: verticalScale(10),
     textAlign: 'center',
   },
@@ -38,7 +39,7 @@ const style = StyleSheet.create({
   },
   button: {
     borderWidth: 2,
-    borderColor: '#2979F2',
+    borderColor: Colors.lightBlue,
     paddingHorizontal: horizontalScale(30),
     paddingVertical: verticalScale(12),
     justifyContent: 'center',
@@ -48,7 +49,7 @@ const style = StyleSheet.create({
     fontFamily: 'Raleway',
     fontSize: scaleFontSize(20),
     fontWeight: '500',
-    color: '#2979F2',
+    color: Colors.lightBlue,
     textAlign: 'center',
   },
 });

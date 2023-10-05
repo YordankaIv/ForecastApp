@@ -25,52 +25,61 @@ import 'react-native-url-polyfill/auto';
 import style from './style';
 
 const WeatherComponent: React.FC<WeatherComponentProps> = ({
-  locationData,
+  location,
   refreshing,
   getWeatherConditionId,
 }) => {
   const openWeatherMap = new URL(OPEN_WEATHER_MAP_URL);
   const [unit, setUnit] = useState(CELSIUS_UNIT);
-  const [weatherDetails, setWeatherDetails] = useState(weatherDetailsConstants);
   const [weatherDetailsValues, setWeatherDetailsValues] = useState<
     Record<string, string>
   >({wind: '', humidity: '', sunrise: '', sunset: '', cloudiness: ''});
 
-  const getCurrentWeather = async () => {
+  const getCurrentWeather = async (metric: string) => {
     const locationParams = {
-      lat: locationData.lat.toString(),
-      lon: locationData.lon.toString(),
-      units: unit,
+      lat: location.lat.toString(),
+      lon: location.lon.toString(),
+      units: metric,
       appid: OPEN_WEATHER_MAP_APP_ID,
     };
     openWeatherMap.search = new URLSearchParams(locationParams).toString();
 
-    const url = openWeatherMap.toString();
-    const {data} = await axios.get(url);
-    getWeatherConditionId(data.weather[0].id);
-    prepareWeatherDetails(data);
+    const currentWeatherUrl = openWeatherMap.toString();
+    const {data: weatherCondition} = await axios.get(currentWeatherUrl);
+    getWeatherConditionId(weatherCondition.weather[0].id);
+    prepareWeatherDetails(weatherCondition);
 
-    return data;
+    return weatherCondition;
   };
 
-  const {isFetching, isError, error, data, refetch} = useQuery({
-    queryKey: 'weather',
-    queryFn: getCurrentWeather,
-  });
+  const {
+    isFetching,
+    isError,
+    error,
+    data: weatherCondition,
+    refetch,
+  } = useQuery<Weather, Error>(['weather', unit], () =>
+    getCurrentWeather(unit),
+  );
 
-  useEffect(() => {
-    refetch();
-  }, [unit, refreshing, refetch]);
+  const formatTime = (time: number | string) => {
+    let formatedTime = time.toString();
+    if (typeof time === 'number') {
+      formatedTime = moment.unix(time).format(TIME_FORMAT);
+    }
 
-  const prepareWeatherDetails = (weatherData: Weather) => {
+    return formatedTime;
+  };
+
+  const currentDate = weatherCondition?.dt;
+
+  const prepareWeatherDetails = (weather: Weather) => {
     const weatherValues = {
-      wind: weatherData.wind.speed + M_S_METRIC,
-      humidity: weatherData.main.humidity + PERCENT_METRIC,
-      sunrise: moment
-        .unix(weatherData.sys.sunrise as number)
-        .format(TIME_FORMAT),
-      sunset: moment.unix(weatherData.sys.sunset as number).format(TIME_FORMAT),
-      cloudiness: weatherData.clouds.all + PERCENT_METRIC,
+      wind: weather.wind.speed + M_S_METRIC,
+      humidity: weather.main.humidity + PERCENT_METRIC,
+      sunrise: formatTime(weather.sys.sunrise),
+      sunset: formatTime(weather.sys.sunset),
+      cloudiness: weather.clouds.all + PERCENT_METRIC,
     };
 
     setWeatherDetailsValues(weatherValues);
@@ -82,13 +91,13 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
   };
 
   return (
-    <View>
+    <>
       {isFetching || refreshing ? (
         <View style={style.infoContainer}>
           {isError ? (
             <ErrorComponent
-              errorText={error ? (error as Error).message : ERROR_FORECAST_TEXT}
-              onPress={() => refetch() as unknown as Promise<void>}
+              errorText={error ? error.message : ERROR_FORECAST_TEXT}
+              onRefreshPress={() => refetch()}
             />
           ) : (
             <View style={style.indicatorContainer}>
@@ -97,21 +106,25 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
           )}
         </View>
       ) : (
-        <View>
-          <View>
+        <>
+          <>
             <Text style={style.dateAndTime}>
-              {moment.unix(data.dt).format(DATE_TIME_FORMAT)}
+              {currentDate && moment.unix(currentDate).format(DATE_TIME_FORMAT)}
             </Text>
-          </View>
-          <WeatherHeader weatherData={data} unit={unit} />
-          <WeatherDescription
-            weatherData={data}
-            unit={unit}
-            handlePress={handleChangeOfUnit}
-          />
+          </>
+          {weatherCondition && (
+            <>
+              <WeatherHeader weather={weatherCondition} unit={unit} />
+              <WeatherDescription
+                weather={weatherCondition}
+                unit={unit}
+                onChangeUnit={handleChangeOfUnit}
+              />
+            </>
+          )}
 
           <View style={style.weatherDescriptionDetails}>
-            {weatherDetails.map((detail, index) => (
+            {weatherDetailsConstants.map((detail, index) => (
               <View key={index} style={style.weatherDescription}>
                 {detail.map((description, detailIndex) => (
                   <WeatherItem
@@ -126,9 +139,9 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
               </View>
             ))}
           </View>
-        </View>
+        </>
       )}
-    </View>
+    </>
   );
 };
 

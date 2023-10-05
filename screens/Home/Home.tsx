@@ -25,6 +25,7 @@ import {
   requestLocationPermission,
 } from '../../utils/utils';
 import {useRefresh} from '../../hooks/common/useRefresh';
+import {WeatherConditionIds} from '../../utils/weatherConstants';
 
 import style from './style';
 
@@ -45,11 +46,17 @@ const Home: React.FC = () => {
       await requestLocationPermission();
     }
 
-    const data = await getPosition();
-    return data;
+    const geolocation = await getPosition();
+    return geolocation;
   };
 
-  const {isSuccess, isError, data, refetch, error} = useQuery({
+  const {
+    isSuccess,
+    isError,
+    data: location,
+    refetch,
+    error,
+  } = useQuery<GeolocationResponse, Error>({
     queryKey: 'location',
     queryFn: getLocation,
   });
@@ -77,20 +84,20 @@ const Home: React.FC = () => {
 
   const getWeatherConditionId = (id: number) => {
     switch (id.toString()[0]) {
-      case '8':
+      case WeatherConditionIds.SUNNY_WEATHER_CONDITION_ID:
         setBackgroundImageURI(BACKGROUNT_IMAGE_URI);
         break;
-      case '7':
+      case WeatherConditionIds.FOGGY_WEATHER_CONDITION_ID:
         setBackgroundImageURI(BACKGROUNT_IMAGE_FOG_URI);
         break;
-      case '6':
+      case WeatherConditionIds.SNOWY_WEATHER_CONDITION_ID:
         setBackgroundImageURI(BACKGROUNT_IMAGE_SNOW_URI);
         break;
-      case '5':
-      case '3':
+      case WeatherConditionIds.HEAVY_RAINY_WEATHER_CONDITION_ID:
+      case WeatherConditionIds.LIGHT_RAINY_WEATHER_CONDITION_ID:
         setBackgroundImageURI(BACKGROUNT_IMAGE_RAIN_URI);
         break;
-      case '2':
+      case WeatherConditionIds.STORM_WEATHER_CONDITION_ID:
         setBackgroundImageURI(BACKGROUNT_IMAGE_STORM_URI);
         break;
       default:
@@ -114,15 +121,15 @@ const Home: React.FC = () => {
           contentContainerStyle={style.container}>
           {isError && (
             <ErrorComponent
-              errorText={error ? (error as Error).message : ERROR_LOCATION_TEXT}
+              errorText={error ? error.message : ERROR_LOCATION_TEXT}
             />
           )}
           {isSuccess && (
             <WeatherComponent
               getWeatherConditionId={getWeatherConditionId}
-              locationData={{
-                lat: (data as GeolocationResponse).coords.latitude,
-                lon: (data as GeolocationResponse).coords.longitude,
+              location={{
+                lat: location.coords.latitude,
+                lon: location.coords.longitude,
               }}
               refreshing={refreshing}
             />

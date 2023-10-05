@@ -4,6 +4,7 @@ import {
   scaleFontSize,
   verticalScale,
 } from '../../assets/styles/scaling';
+import {Colors} from '../../utils/colorsContants';
 
 const style = StyleSheet.create({
   infoContainer: {
@@ -20,20 +21,20 @@ const style = StyleSheet.create({
     fontFamily: 'Raleway',
     fontSize: scaleFontSize(20),
     fontWeight: '600',
-    color: '#ffffff',
-    textShadowColor: '#131212',
+    color: Colors.white,
+    textShadowColor: Colors.white,
     textShadowOffset: {width: 1, height: 1},
     textShadowRadius: 2,
     paddingVertical: verticalScale(12),
     marginBottom: verticalScale(20),
     borderBottomWidth: 1,
-    borderBottomColor: '#ffffff',
+    borderBottomColor: Colors.white,
   },
   errorContainer: {
     marginVertical: verticalScale(30),
   },
   button: {
-    backgroundColor: '#2979F2',
+    backgroundColor: Colors.lightBlue,
     height: horizontalScale(55),
     justifyContent: 'center',
     borderRadius: horizontalScale(50),
@@ -43,8 +44,8 @@ const style = StyleSheet.create({
     fontSize: scaleFontSize(16),
     fontWeight: '500',
     lineHeight: 19,
-    color: '#ffffff',
-    textShadowColor: '#131212',
+    color: Colors.lightBlue,
+    textShadowColor: Colors.lightBlue,
     textShadowOffset: {width: 0, height: 0},
     textShadowRadius: 2,
     textAlign: 'center',
@@ -67,14 +68,14 @@ const style = StyleSheet.create({
     justifyContent: 'center',
     opacity: 0.3,
     borderRadius: horizontalScale(20),
-    backgroundColor: '#007FFF',
+    backgroundColor: Colors.blue,
   },
   descriptionLabel: {
     fontFamily: 'Raleway',
     fontSize: scaleFontSize(16),
     fontWeight: '600',
-    color: '#ffffff',
-    textShadowColor: '#131212',
+    color: Colors.lightBlue,
+    textShadowColor: Colors.lightBlue,
     textShadowOffset: {width: 0, height: 0},
     textShadowRadius: 2,
   },

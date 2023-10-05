@@ -4,10 +4,11 @@ import {
   scaleFontSize,
   verticalScale,
 } from '../../assets/styles/scaling';
+import {Colors} from '../../utils/colorsContants';
 
 const style = StyleSheet.create({
   button: {
-    backgroundColor: '#2979F2',
+    backgroundColor: Colors.lightBlue,
     height: horizontalScale(40),
     width: horizontalScale(150),
     justifyContent: 'center',
@@ -19,8 +20,8 @@ const style = StyleSheet.create({
     fontSize: scaleFontSize(16),
     fontWeight: '500',
     lineHeight: 19,
-    color: '#ffffff',
-    textShadowColor: '#131212',
+    color: Colors.lightBlue,
+    textShadowColor: Colors.lightBlue,
     textShadowOffset: {width: 0, height: 0},
     textShadowRadius: 2,
     textAlign: 'center',
@@ -30,7 +31,7 @@ const style = StyleSheet.create({
     fontSize: scaleFontSize(30),
     fontWeight: '600',
     textAlign: 'center',
-    color: '#FF0000',
+    color: Colors.red,
     marginTop: verticalScale(15),
   },
   errorContainer: {
