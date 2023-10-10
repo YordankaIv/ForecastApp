@@ -1,6 +1,12 @@
 import React, {useState} from 'react';
 import moment from 'moment';
-import {ActivityIndicator, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  RefreshControl,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 import {
   CELSIUS_UNIT,
   DATE_TIME_FORMAT,
@@ -38,6 +44,7 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
   location,
   refreshing,
   getWeatherConditionId,
+  handleRefresh,
 }) => {
   const [unit, setUnit] = useState(CELSIUS_UNIT);
   const [currentWeatherDetails, setCurrentWeatherDetails] = useState<
@@ -177,44 +184,54 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
         </View>
       ) : (
         <>
-          <>
+          <View style={style.container}>
             <Text style={style.dateAndTime}>
               {currentDate && moment.unix(currentDate).format(DATE_TIME_FORMAT)}
             </Text>
-          </>
+          </View>
           {currentWeatherCondition && (
-            <>
+            <View style={style.stickyHeader}>
               <WeatherHeader weather={currentWeatherCondition} unit={unit} />
               <WeatherDescription
                 weather={currentWeatherCondition}
                 unit={unit}
                 onChangeUnit={handleChangeOfUnit}
               />
-            </>
+            </View>
           )}
 
-          <View style={style.weatherDescriptionDetails}>
-            {weatherDetailsConstants.map((detail, index) => (
-              <View key={index} style={style.weatherDescription}>
-                {detail.map((description, detailIndex) => (
-                  <WeatherItem
-                    key={detailIndex + 'detail'}
-                    icon={description.icon}
-                    label={description.label}
-                    value={
-                      currentWeatherDetails[description.label.toLowerCase()]
-                    }
-                  />
-                ))}
-              </View>
-            ))}
-          </View>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={handleRefresh}
+              />
+            }
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={style.container}>
+            <View style={style.weatherDescriptionDetails}>
+              {weatherDetailsConstants.map((detail, index) => (
+                <View key={index} style={style.weatherDescription}>
+                  {detail.map((description, detailIndex) => (
+                    <WeatherItem
+                      key={detailIndex + 'detail'}
+                      icon={description.icon}
+                      label={description.label}
+                      value={
+                        currentWeatherDetails[description.label.toLowerCase()]
+                      }
+                    />
+                  ))}
+                </View>
+              ))}
+            </View>
 
-          <>
-            {weekForecast?.length && (
-              <WeatherWeekForecast weekForecast={weekForecast} />
-            )}
-          </>
+            <>
+              {weekForecast?.length && (
+                <WeatherWeekForecast weekForecast={weekForecast} />
+              )}
+            </>
+          </ScrollView>
         </>
       )}
     </>

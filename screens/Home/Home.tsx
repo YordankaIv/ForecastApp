@@ -1,11 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  AppState,
-  ImageBackground,
-  RefreshControl,
-  SafeAreaView,
-  ScrollView,
-} from 'react-native';
+import {AppState, ImageBackground, SafeAreaView} from 'react-native';
 import {
   BACKGROUNT_IMAGE_FOG_URI,
   BACKGROUNT_IMAGE_RAIN_URI,
@@ -113,28 +107,22 @@ const Home: React.FC = () => {
         }}
         resizeMode={'cover'}
         style={style.image}>
-        <ScrollView
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-          }
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={style.container}>
-          {isError && (
-            <ErrorComponent
-              errorText={error ? error.message : ERROR_LOCATION_TEXT}
-            />
-          )}
-          {isSuccess && (
-            <WeatherComponent
-              getWeatherConditionId={getWeatherConditionId}
-              location={{
-                lat: location.coords.latitude,
-                lon: location.coords.longitude,
-              }}
-              refreshing={refreshing}
-            />
-          )}
-        </ScrollView>
+        {isError && (
+          <ErrorComponent
+            errorText={error ? error.message : ERROR_LOCATION_TEXT}
+          />
+        )}
+        {isSuccess && (
+          <WeatherComponent
+            handleRefresh={handleRefresh}
+            getWeatherConditionId={getWeatherConditionId}
+            location={{
+              lat: location.coords.latitude,
+              lon: location.coords.longitude,
+            }}
+            refreshing={refreshing}
+          />
+        )}
       </ImageBackground>
     </SafeAreaView>
   );

@@ -4,6 +4,7 @@ export type WeatherComponentProps = {
   location: {lat: number; lon: number};
   refreshing: boolean;
   getWeatherConditionId: (id: number) => void;
+  handleRefresh: () => void;
 };
 
 export type WeatherDetails = {

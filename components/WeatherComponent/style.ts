@@ -11,6 +11,13 @@ const style = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  container: {
+    marginHorizontal: horizontalScale(24),
+    marginTop: verticalScale(40),
+  },
+  stickyHeader: {
+    marginHorizontal: horizontalScale(24),
+  },
   indicatorContainer: {
     flex: 1,
     height: verticalScale(300),
@@ -53,7 +60,6 @@ const style = StyleSheet.create({
   weatherDescriptionDetails: {
     flex: 1,
     flexDirection: 'column',
-    marginTop: verticalScale(30),
   },
   weatherDescription: {
     flex: 1,

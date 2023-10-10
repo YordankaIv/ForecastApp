@@ -4,12 +4,10 @@ import {Colors} from '../../utils/colorsContants';
 
 const style = StyleSheet.create({
   detailsContainer: {
-    flex: 1,
     flexDirection: 'column',
     marginTop: verticalScale(25),
   },
   locationContainer: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -24,7 +22,6 @@ const style = StyleSheet.create({
     textShadowRadius: 2,
   },
   tempDetailsContainer: {
-    flex: 1,
     flexDirection: 'row',
     marginTop: verticalScale(5),
   },
