@@ -6,7 +6,7 @@ export type WeatherComponentProps = {
   getWeatherConditionId: (id: number) => void;
 };
 
-type WeatherDetails = {
+export type WeatherDetails = {
   [key: string]: string | number;
 };
 
@@ -31,6 +31,18 @@ export type WeatherHeaderProps = {
   unit: string;
 };
 
+export type Forecast = {
+  date: string;
+  icon: string | number;
+  min_temp: string;
+  max_temp: string;
+  humidity: string;
+};
+
+export type WeatherWeekForecastProps = {
+  weekForecast: Forecast[];
+};
+
 export type WeatherDescriptionProps = {
   weather: Weather;
   unit: string;
@@ -42,3 +54,5 @@ export type WeatherItemProps = {
   value: string;
   icon: IconDefinition;
 };
+
+export type SortOrder = 'asc' | 'desc';

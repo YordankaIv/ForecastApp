@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import moment from 'moment';
 import {ActivityIndicator, Text, View} from 'react-native';
 import {
@@ -6,13 +6,21 @@ import {
   DATE_TIME_FORMAT,
   ERROR_FORECAST_TEXT,
   FAHRENHEIT_UNIT,
+  FORECAST,
+  MIDDLE_OF_DAY_FORMAT,
   M_S_METRIC,
   OPEN_WEATHER_MAP_APP_ID,
   OPEN_WEATHER_MAP_URL,
   PERCENT_METRIC,
   TIME_FORMAT,
+  WEATHER,
+  WEEK_DAY_FORMAT,
 } from '../../utils/constants';
-import {Weather, WeatherComponentProps} from '../../types/WeatherTypes';
+import {
+  Forecast,
+  Weather,
+  WeatherComponentProps,
+} from '../../types/WeatherTypes';
 import WeatherItem from '../WeatherItem/WeatherItem';
 import {weatherDetailsConstants} from '../../utils/weatherConstants';
 import WeatherHeader from '../WeatherHeader/WeatherHeader';
@@ -20,6 +28,8 @@ import WeatherDescription from '../WeatherDescription/WeatherDescription';
 import ErrorComponent from '../ErrorComponent/ErrorComponent';
 import axios from 'axios';
 import {useQuery} from 'react-query';
+import WeatherWeekForecast from '../WeatherWeekForecast/WeatherWeekForecast';
+import {formatTemperature} from '../../utils/utils';
 import 'react-native-url-polyfill/auto';
 
 import style from './style';
@@ -29,49 +39,88 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
   refreshing,
   getWeatherConditionId,
 }) => {
-  const openWeatherMap = new URL(OPEN_WEATHER_MAP_URL);
   const [unit, setUnit] = useState(CELSIUS_UNIT);
-  const [weatherDetailsValues, setWeatherDetailsValues] = useState<
+  const [currentWeatherDetails, setCurrentWeatherDetails] = useState<
     Record<string, string>
   >({wind: '', humidity: '', sunrise: '', sunset: '', cloudiness: ''});
 
-  const getCurrentWeather = async (metric: string) => {
+  const getWeather = async (url: string, metric: string) => {
+    const openWeatherMapUrl = new URL(url);
     const locationParams = {
       lat: location.lat.toString(),
       lon: location.lon.toString(),
       units: metric,
       appid: OPEN_WEATHER_MAP_APP_ID,
     };
-    openWeatherMap.search = new URLSearchParams(locationParams).toString();
+    openWeatherMapUrl.search = new URLSearchParams(locationParams).toString();
 
-    const currentWeatherUrl = openWeatherMap.toString();
-    const {data: weatherCondition} = await axios.get(currentWeatherUrl);
+    const currentWeatherUrl = openWeatherMapUrl.toString();
+    const response = await axios.get(currentWeatherUrl);
+
+    return response.data;
+  };
+
+  const getCurrentWeather = async (metric: string) => {
+    const weatherCondition = await getWeather(
+      OPEN_WEATHER_MAP_URL + WEATHER,
+      metric,
+    );
+
     getWeatherConditionId(weatherCondition.weather[0].id);
-    prepareWeatherDetails(weatherCondition);
+    const weatherValues = prepareWeatherDetails(weatherCondition);
+    setCurrentWeatherDetails(weatherValues);
 
     return weatherCondition;
   };
 
+  const getWeekForecast = async (metric: string) => {
+    const weekForecast = await getWeather(
+      OPEN_WEATHER_MAP_URL + FORECAST,
+      metric,
+    );
+    const weekForecastDetails: Forecast[] = [];
+
+    const weekMiddleDayForecast = weekForecast.list.filter(
+      (weekday: Record<string, number>) =>
+        moment.unix(weekday.dt).format(TIME_FORMAT) === MIDDLE_OF_DAY_FORMAT,
+    );
+
+    weekMiddleDayForecast.forEach((weekday: Weather) => {
+      const weatherValues = prepareWeekDayDetails(weekday);
+      weekForecastDetails.push(weatherValues);
+    });
+
+    return weekForecastDetails;
+  };
+
+  const {
+    isFetching: isLoading,
+    isError: isErrorWeather,
+    error: currentWeatherError,
+    data: currentWeatherCondition,
+    refetch: reFetchCurrentWeather,
+  } = useQuery<Weather, Error>([WEATHER, unit], () => getCurrentWeather(unit));
+
   const {
     isFetching,
     isError,
-    error,
-    data: weatherCondition,
-    refetch,
-  } = useQuery<Weather, Error>(['weather', unit], () =>
-    getCurrentWeather(unit),
+    error: weekForecastError,
+    data: weekForecast,
+    refetch: reFetchWeekWeather,
+  } = useQuery<Forecast[], Error>([FORECAST, unit], () =>
+    getWeekForecast(unit),
   );
 
   const formatTime = (time: number | string) => {
-    let formatedTime = time.toString();
+    let formattedTime = time.toString();
     if (typeof time === 'number') {
-      formatedTime = moment.unix(time).format(TIME_FORMAT);
+      formattedTime = moment.unix(time).format(TIME_FORMAT);
     }
 
-    return formatedTime;
+    return formattedTime;
   };
 
-  const currentDate = weatherCondition?.dt;
+  const currentDate = currentWeatherCondition?.dt;
 
   const prepareWeatherDetails = (weather: Weather) => {
     const weatherValues = {
@@ -82,7 +131,19 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
       cloudiness: weather.clouds.all + PERCENT_METRIC,
     };
 
-    setWeatherDetailsValues(weatherValues);
+    return weatherValues;
+  };
+
+  const prepareWeekDayDetails = (dayForecast: Weather) => {
+    const dayWeatherDetails = {
+      date: moment.unix(dayForecast.dt).format(WEEK_DAY_FORMAT),
+      icon: dayForecast.weather[0].icon,
+      min_temp: formatTemperature(dayForecast.main.temp_max, unit),
+      max_temp: formatTemperature(dayForecast.main.temp_max, unit),
+      humidity: dayForecast.main.humidity + PERCENT_METRIC,
+    };
+
+    return dayWeatherDetails;
   };
 
   const handleChangeOfUnit = () => {
@@ -92,12 +153,21 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
 
   return (
     <>
-      {isFetching || refreshing ? (
+      {isFetching || isLoading || refreshing ? (
         <View style={style.infoContainer}>
-          {isError ? (
+          {isError || isErrorWeather ? (
             <ErrorComponent
-              errorText={error ? error.message : ERROR_FORECAST_TEXT}
-              onRefreshPress={() => refetch()}
+              errorText={
+                currentWeatherError
+                  ? currentWeatherError.message
+                  : weekForecastError
+                  ? weekForecastError.message
+                  : ERROR_FORECAST_TEXT
+              }
+              onRefreshPress={() => {
+                reFetchCurrentWeather();
+                reFetchWeekWeather();
+              }}
             />
           ) : (
             <View style={style.indicatorContainer}>
@@ -112,11 +182,11 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
               {currentDate && moment.unix(currentDate).format(DATE_TIME_FORMAT)}
             </Text>
           </>
-          {weatherCondition && (
+          {currentWeatherCondition && (
             <>
-              <WeatherHeader weather={weatherCondition} unit={unit} />
+              <WeatherHeader weather={currentWeatherCondition} unit={unit} />
               <WeatherDescription
-                weather={weatherCondition}
+                weather={currentWeatherCondition}
                 unit={unit}
                 onChangeUnit={handleChangeOfUnit}
               />
@@ -132,13 +202,19 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
                     icon={description.icon}
                     label={description.label}
                     value={
-                      weatherDetailsValues[description.label.toLowerCase()]
+                      currentWeatherDetails[description.label.toLowerCase()]
                     }
                   />
                 ))}
               </View>
             ))}
           </View>
+
+          <>
+            {weekForecast?.length && (
+              <WeatherWeekForecast weekForecast={weekForecast} />
+            )}
+          </>
         </>
       )}
     </>

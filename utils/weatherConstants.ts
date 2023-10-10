@@ -1,5 +1,5 @@
 import {faSun} from '@fortawesome/free-regular-svg-icons';
-import {faWater, faWind} from '@fortawesome/free-solid-svg-icons';
+import {faDroplet, faWind} from '@fortawesome/free-solid-svg-icons';
 import {faCloudflare} from '@fortawesome/free-brands-svg-icons';
 
 export const weatherDetailsConstants = [
@@ -10,7 +10,7 @@ export const weatherDetailsConstants = [
     },
     {
       label: 'Humidity',
-      icon: faWater,
+      icon: faDroplet,
     },
   ],
   [
