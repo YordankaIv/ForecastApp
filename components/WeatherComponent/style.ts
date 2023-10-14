@@ -11,6 +11,10 @@ const style = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  tabContainer: {
+    flex: 1,
+    marginHorizontal: horizontalScale(24),
+  },
   container: {
     marginHorizontal: horizontalScale(24),
     marginTop: verticalScale(40),
@@ -57,15 +61,9 @@ const style = StyleSheet.create({
     textShadowRadius: 2,
     textAlign: 'center',
   },
-  weatherDescriptionDetails: {
+  weatherWeekForecast: {
     flex: 1,
     flexDirection: 'column',
-  },
-  weatherDescription: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: verticalScale(20),
   },
   descriptionContainer: {
     width: '48%',
@@ -84,6 +82,12 @@ const style = StyleSheet.create({
     textShadowColor: Colors.lightBlue,
     textShadowOffset: {width: 0, height: 0},
     textShadowRadius: 2,
+  },
+  tabIndicator: {
+    backgroundColor: Colors.white,
+  },
+  tabBar: {
+    backgroundColor: 'transparent',
   },
 });
 

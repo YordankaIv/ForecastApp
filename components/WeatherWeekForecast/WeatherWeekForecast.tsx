@@ -125,7 +125,9 @@ const WeatherWeekForecast: React.FC<WeatherWeekForecastProps> = ({
           </>
         </>
       ) : (
-        <FontAwesomeIcon icon={faSpinner} size={25} color={Colors.white} />
+        <View style={style.loadingContainer}>
+          <FontAwesomeIcon icon={faSpinner} size={25} color={Colors.white} />
+        </View>
       )}
     </View>
   );

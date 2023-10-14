@@ -1,12 +1,6 @@
 import React, {useState} from 'react';
 import moment from 'moment';
-import {
-  ActivityIndicator,
-  RefreshControl,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
+import {ActivityIndicator, Text, View} from 'react-native';
 import {
   CELSIUS_UNIT,
   DATE_TIME_FORMAT,
@@ -18,6 +12,10 @@ import {
   OPEN_WEATHER_MAP_APP_ID,
   OPEN_WEATHER_MAP_URL,
   PERCENT_METRIC,
+  TAB_ROUTE_CURRENT_FORECAST_KEY,
+  TAB_ROUTE_CURRENT_FORECAST_TITLE,
+  TAB_ROUTE_WEEK_FORECAST_KEY,
+  TAB_ROUTE_WEEK_FORECAST_TITLE,
   TIME_FORMAT,
   WEATHER,
   WEEK_DAY_FORMAT,
@@ -27,15 +25,21 @@ import {
   Weather,
   WeatherComponentProps,
 } from '../../types/WeatherTypes';
-import WeatherItem from '../WeatherItem/WeatherItem';
-import {weatherDetailsConstants} from '../../utils/weatherConstants';
+
 import WeatherHeader from '../WeatherHeader/WeatherHeader';
 import WeatherDescription from '../WeatherDescription/WeatherDescription';
 import ErrorComponent from '../ErrorComponent/ErrorComponent';
 import axios from 'axios';
 import {useQuery} from 'react-query';
-import WeatherWeekForecast from '../WeatherWeekForecast/WeatherWeekForecast';
 import {formatTemperature} from '../../utils/utils';
+import {TabBar, TabView} from 'react-native-tab-view';
+import {SceneMap} from 'react-native-tab-view';
+import {
+  FirstRoute,
+  RouteWrapper,
+  SecondRoute,
+  initialLayout,
+} from '../WeatherTabRoutes/WeatherTabRoutes';
 import 'react-native-url-polyfill/auto';
 
 import style from './style';
@@ -44,12 +48,17 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
   location,
   refreshing,
   getWeatherConditionId,
-  handleRefresh,
+  // handleRefresh,
 }) => {
   const [unit, setUnit] = useState(CELSIUS_UNIT);
-  const [currentWeatherDetails, setCurrentWeatherDetails] = useState<
-    Record<string, string>
-  >({wind: '', humidity: '', sunrise: '', sunset: '', cloudiness: ''});
+  const [index, setIndex] = useState(0);
+  const [routes, setRoutes] = useState<Array<Record<K, T>>>([
+    {
+      key: TAB_ROUTE_CURRENT_FORECAST_KEY,
+      title: TAB_ROUTE_CURRENT_FORECAST_TITLE,
+    },
+    {key: TAB_ROUTE_WEEK_FORECAST_KEY, title: TAB_ROUTE_WEEK_FORECAST_TITLE},
+  ]);
 
   const getWeather = async (url: string, metric: string) => {
     const openWeatherMapUrl = new URL(url);
@@ -75,7 +84,14 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
 
     getWeatherConditionId(weatherCondition.weather[0].id);
     const weatherValues = prepareWeatherDetails(weatherCondition);
-    setCurrentWeatherDetails(weatherValues);
+
+    const firstRoute = routes.find(
+      route => route.key === TAB_ROUTE_CURRENT_FORECAST_KEY,
+    );
+    if (firstRoute) {
+      firstRoute.content = weatherValues;
+      setRoutes([...routes]);
+    }
 
     return weatherCondition;
   };
@@ -97,12 +113,22 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
       weekForecastDetails.push(weatherValues);
     });
 
+    const secondRoute = routes.find(
+      route => route.key === TAB_ROUTE_WEEK_FORECAST_KEY,
+    );
+    if (secondRoute) {
+      secondRoute.content = weekForecastDetails;
+
+      setRoutes([...routes]);
+    }
+
     return weekForecastDetails;
   };
 
   const {
     isFetching: isLoading,
     isError: isErrorWeather,
+    isSuccess: isCurrentWeatherDone,
     error: currentWeatherError,
     data: currentWeatherCondition,
     refetch: reFetchCurrentWeather,
@@ -111,8 +137,8 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
   const {
     isFetching,
     isError,
+    isSuccess: isWeekForecastDone,
     error: weekForecastError,
-    data: weekForecast,
     refetch: reFetchWeekWeather,
   } = useQuery<Forecast[], Error>([FORECAST, unit], () =>
     getWeekForecast(unit),
@@ -158,6 +184,19 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
     setUnit(newUnit);
   };
 
+  const renderScene = SceneMap({
+    first: RouteWrapper(FirstRoute),
+    second: RouteWrapper(SecondRoute),
+  });
+
+  const renderTabBar = (props: T) => (
+    <TabBar
+      {...props}
+      indicatorStyle={style.tabIndicator}
+      style={style.tabBar}
+    />
+  );
+
   return (
     <>
       {isFetching || isLoading || refreshing ? (
@@ -200,38 +239,17 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
             </View>
           )}
 
-          <ScrollView
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={handleRefresh}
+          {isCurrentWeatherDone && isWeekForecastDone && (
+            <View style={style.tabContainer}>
+              <TabView
+                renderTabBar={renderTabBar}
+                navigationState={{index, routes}}
+                renderScene={renderScene}
+                onIndexChange={setIndex}
+                initialLayout={initialLayout}
               />
-            }
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={style.container}>
-            <View style={style.weatherDescriptionDetails}>
-              {weatherDetailsConstants.map((detail, index) => (
-                <View key={index} style={style.weatherDescription}>
-                  {detail.map((description, detailIndex) => (
-                    <WeatherItem
-                      key={detailIndex + 'detail'}
-                      icon={description.icon}
-                      label={description.label}
-                      value={
-                        currentWeatherDetails[description.label.toLowerCase()]
-                      }
-                    />
-                  ))}
-                </View>
-              ))}
             </View>
-
-            <>
-              {weekForecast?.length && (
-                <WeatherWeekForecast weekForecast={weekForecast} />
-              )}
-            </>
-          </ScrollView>
+          )}
         </>
       )}
     </>

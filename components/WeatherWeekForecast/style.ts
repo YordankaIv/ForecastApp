@@ -8,10 +8,13 @@ import {Colors} from '../../utils/colorsContants';
 
 const style = StyleSheet.create({
   weekWeatherContainer: {
-    marginVertical: verticalScale(50),
+    marginVertical: verticalScale(10),
+  },
+  loadingContainer: {
+    marginTop: verticalScale(50),
+    alignItems: 'center',
   },
   dayContainer: {
-    flex: 1,
     flexDirection: 'row',
     gap: 10,
     color: Colors.white,

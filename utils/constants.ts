@@ -59,3 +59,8 @@ export const OFFLINE_PAGE_BUTTON = 'Retry';
 
 export const ASC_ORDER = 'asc';
 export const DESC_ORDER = 'desc';
+
+export const TAB_ROUTE_CURRENT_FORECAST_KEY = 'first';
+export const TAB_ROUTE_WEEK_FORECAST_KEY = 'second';
+export const TAB_ROUTE_CURRENT_FORECAST_TITLE = 'Daily';
+export const TAB_ROUTE_WEEK_FORECAST_TITLE = '5-Day';
