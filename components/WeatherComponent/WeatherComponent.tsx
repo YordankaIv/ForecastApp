@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import moment from 'moment';
-import {ActivityIndicator, Text, View} from 'react-native';
+import {ActivityIndicator, NativeModules, Text, View} from 'react-native';
 import {
   CELSIUS_UNIT,
   DATE_TIME_FORMAT,
@@ -32,8 +32,7 @@ import ErrorComponent from '../ErrorComponent/ErrorComponent';
 import axios from 'axios';
 import {useQuery} from 'react-query';
 import {formatTemperature} from '../../utils/utils';
-import {TabBar, TabView} from 'react-native-tab-view';
-import {SceneMap} from 'react-native-tab-view';
+import {TabBar, TabView, SceneMap} from 'react-native-tab-view';
 import {
   FirstRoute,
   RouteWrapper,
@@ -41,8 +40,12 @@ import {
   initialLayout,
 } from '../WeatherTabRoutes/WeatherTabRoutes';
 import 'react-native-url-polyfill/auto';
+import SharedGroupPreferences from 'react-native-shared-group-preferences';
 
 import style from './style';
+
+const group = 'group.streak';
+const SharedStorage = NativeModules.SharedStorage;
 
 const WeatherComponent: React.FC<WeatherComponentProps> = ({
   location,
@@ -59,6 +62,31 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
     },
     {key: TAB_ROUTE_WEEK_FORECAST_KEY, title: TAB_ROUTE_WEEK_FORECAST_TITLE},
   ]);
+
+  const widgetData = {
+    city: '',
+    temperature: '',
+  };
+
+  const updateWidgetData = async (
+    currentTemp: number,
+    currentLocation: string,
+  ) => {
+    try {
+      // iOS
+      await SharedGroupPreferences.setItem('widgetKey', widgetData, group);
+    } catch (error) {
+      console.log({error});
+    }
+
+    const value = {
+      city: currentLocation,
+      temperature: formatTemperature(currentTemp, unit),
+    };
+
+    // Android
+    SharedStorage.set(JSON.stringify(value));
+  };
 
   const getWeather = async (url: string, metric: string) => {
     const openWeatherMapUrl = new URL(url);
@@ -81,6 +109,7 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
       OPEN_WEATHER_MAP_URL + WEATHER,
       metric,
     );
+    await updateWidgetData(weatherCondition.main.temp, weatherCondition.name);
 
     getWeatherConditionId(weatherCondition.weather[0].id);
     const weatherValues = prepareWeatherDetails(weatherCondition);
