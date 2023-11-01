@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Image, Pressable, Text, View} from 'react-native';
 import {Forecast, WeatherWeekForecastProps} from '../../types/WeatherTypes';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {Colors} from '../../utils/colorsContants';
+import {Colors} from '../../utils/colorsConstants';
 import {
   faChevronDown,
   faChevronUp,

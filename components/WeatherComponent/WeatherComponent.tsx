@@ -12,6 +12,8 @@ import {
   OPEN_WEATHER_MAP_APP_ID,
   OPEN_WEATHER_MAP_URL,
   PERCENT_METRIC,
+  TAB_ROUTE_CHART_FORECAST_KEY,
+  TAB_ROUTE_CHART_FORECAST_TITLE,
   TAB_ROUTE_CURRENT_FORECAST_KEY,
   TAB_ROUTE_CURRENT_FORECAST_TITLE,
   TAB_ROUTE_WEEK_FORECAST_KEY,
@@ -19,6 +21,7 @@ import {
   TIME_FORMAT,
   WEATHER,
   WEEK_DAY_FORMAT,
+  WEEK_DAY_SHORT_FORMAT,
 } from '../../utils/constants';
 import {
   Forecast,
@@ -37,6 +40,7 @@ import {
   FirstRoute,
   RouteWrapper,
   SecondRoute,
+  ThirdRoute,
   initialLayout,
 } from '../WeatherTabRoutes/WeatherTabRoutes';
 import 'react-native-url-polyfill/auto';
@@ -61,6 +65,7 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
       key: TAB_ROUTE_CURRENT_FORECAST_KEY,
       title: TAB_ROUTE_CURRENT_FORECAST_TITLE,
     },
+    {key: TAB_ROUTE_CHART_FORECAST_KEY, title: TAB_ROUTE_CHART_FORECAST_TITLE},
     {key: TAB_ROUTE_WEEK_FORECAST_KEY, title: TAB_ROUTE_WEEK_FORECAST_TITLE},
   ]);
 
@@ -110,6 +115,7 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
       OPEN_WEATHER_MAP_URL + WEATHER,
       metric,
     );
+
     await updateWidgetData(weatherCondition.main.temp, weatherCondition.name);
 
     getWeatherConditionId(weatherCondition.weather[0].id);
@@ -132,6 +138,16 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
     return weatherCondition;
   };
 
+  const chartWeekForecast = (weekForecastDetails: Forecast[]) => {
+    const secondRoute = routes.find(
+      route => route.key === TAB_ROUTE_CHART_FORECAST_KEY,
+    );
+    if (secondRoute) {
+      secondRoute.content = weekForecastDetails;
+      setRoutes([...routes]);
+    }
+  };
+
   const getWeekForecast = async (metric: string) => {
     const weekForecast = await getWeather(
       OPEN_WEATHER_MAP_URL + FORECAST,
@@ -149,11 +165,13 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
       weekForecastDetails.push(weatherValues);
     });
 
-    const secondRoute = routes.find(
+    chartWeekForecast(weekForecastDetails);
+
+    const thirdRoute = routes.find(
       route => route.key === TAB_ROUTE_WEEK_FORECAST_KEY,
     );
-    if (secondRoute) {
-      secondRoute.content = weekForecastDetails;
+    if (thirdRoute) {
+      thirdRoute.content = weekForecastDetails;
 
       setRoutes([...routes]);
     }
@@ -206,8 +224,10 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
   const prepareWeekDayDetails = (dayForecast: Weather) => {
     const dayWeatherDetails = {
       date: moment.unix(dayForecast.dt).format(WEEK_DAY_FORMAT),
+      short_label: moment.unix(dayForecast.dt).format(WEEK_DAY_SHORT_FORMAT),
       icon: dayForecast.weather[0].icon,
       min_temp: formatTemperature(dayForecast.main.temp_max, unit),
+      temp: formatTemperature(dayForecast.main.temp, unit),
       max_temp: formatTemperature(dayForecast.main.temp_max, unit),
       humidity: dayForecast.main.humidity + PERCENT_METRIC,
     };
@@ -223,6 +243,7 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
   const renderScene = SceneMap({
     first: RouteWrapper(FirstRoute),
     second: RouteWrapper(SecondRoute),
+    third: RouteWrapper(ThirdRoute),
   });
 
   const renderTabBar = (props: T) => (

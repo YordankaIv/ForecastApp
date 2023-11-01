@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {horizontalScale, scaleFontSize} from '../../assets/styles/scaling';
-import {Colors} from '../../utils/colorsContants';
+import {Colors} from '../../utils/colorsConstants';
 
 const style = StyleSheet.create({
   weatherContainer: {

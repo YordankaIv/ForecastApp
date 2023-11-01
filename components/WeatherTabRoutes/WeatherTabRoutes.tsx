@@ -5,6 +5,7 @@ import WeatherItem from '../WeatherItem/WeatherItem';
 import WeatherWeekForecast from '../WeatherWeekForecast/WeatherWeekForecast';
 
 import style from './style';
+import WeatherChartForecast from '../WeatherChartForecast/WeatherChartForecast';
 
 export const RouteWrapper = (
   WrappedComponent: React.FC<{route: {content: T}}>,
@@ -40,6 +41,14 @@ export const FirstRoute = ({route}: {route: {content: T}}) => (
 );
 
 export const SecondRoute = ({route}: {route: {content: T}}) => (
+  <View>
+    {route.content?.length && (
+      <WeatherChartForecast weekForecast={route.content} />
+    )}
+  </View>
+);
+
+export const ThirdRoute = ({route}: {route: {content: T}}) => (
   <View>
     {route.content?.length && (
       <WeatherWeekForecast weekForecast={route.content} />

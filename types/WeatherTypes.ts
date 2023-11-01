@@ -38,6 +38,8 @@ export type Forecast = {
   min_temp: string;
   max_temp: string;
   humidity: string;
+  short_label?: string;
+  temp?: string;
 };
 
 export type WeatherWeekForecastProps = {

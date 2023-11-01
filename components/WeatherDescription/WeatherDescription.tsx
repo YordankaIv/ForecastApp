@@ -11,7 +11,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faLocationDot} from '@fortawesome/free-solid-svg-icons';
 import {WeatherDescriptionProps} from '../../types/WeatherTypes';
 import {formatTemperature} from '../../utils/utils';
-import {Colors} from '../../utils/colorsContants';
+import {Colors} from '../../utils/colorsConstants';
 
 import style from './style';
 

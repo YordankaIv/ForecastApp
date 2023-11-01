@@ -4,7 +4,7 @@ import {REFRESH_BUTTON} from '../../utils/constants';
 import {ErrorComponentProps} from '../../types/WeatherTypes';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faWarning} from '@fortawesome/free-solid-svg-icons';
-import {Colors} from '../../utils/colorsContants';
+import {Colors} from '../../utils/colorsConstants';
 
 import style from './style';
 

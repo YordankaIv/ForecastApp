@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, View} from 'react-native';
 import {WeatherItemProps} from '../../types/WeatherTypes';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {Colors} from '../../utils/colorsContants';
+import {Colors} from '../../utils/colorsConstants';
 
 import style from './style';
 

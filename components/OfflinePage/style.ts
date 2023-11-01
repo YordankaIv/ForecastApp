@@ -4,7 +4,7 @@ import {
   scaleFontSize,
   verticalScale,
 } from '../../assets/styles/scaling';
-import {Colors} from '../../utils/colorsContants';
+import {Colors} from '../../utils/colorsConstants';
 
 const style = StyleSheet.create({
   flex: {

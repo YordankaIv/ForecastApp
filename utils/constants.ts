@@ -25,6 +25,7 @@ export const PERCENT_METRIC = '%';
 export const TIME_FORMAT = 'LT';
 export const DATE_TIME_FORMAT = 'LLL';
 export const WEEK_DAY_FORMAT = 'dddd';
+export const WEEK_DAY_SHORT_FORMAT = 'dd';
 export const ERROR_MESSAGE = 'Error has occured:';
 export const REFRESH_BUTTON = 'Refresh';
 export const CHANGE_UNIT_TEXT = 'Switch to: ';
@@ -61,11 +62,14 @@ export const ASC_ORDER = 'asc';
 export const DESC_ORDER = 'desc';
 
 export const TAB_ROUTE_CURRENT_FORECAST_KEY = 'first';
-export const TAB_ROUTE_WEEK_FORECAST_KEY = 'second';
+export const TAB_ROUTE_CHART_FORECAST_KEY = 'second';
+export const TAB_ROUTE_WEEK_FORECAST_KEY = 'third';
 export const TAB_ROUTE_CURRENT_FORECAST_TITLE = 'Daily';
+export const TAB_ROUTE_CHART_FORECAST_TITLE = 'Statistics';
 export const TAB_ROUTE_WEEK_FORECAST_TITLE = '5-Day';
 
 export const NOTIFICATIONS_CHANNEL_ID = 'weather';
 export const NOTIFICATIONS_CHANNEL_NAME = 'weather channel';
 export const NOTIFICATIONS_TITLE = 'Weather Update';
 export const NOTIFICATIONS_MESSAGE = "Today's weather:";
+export const CHART_LEGEND_LABEL = 'Temperature';
