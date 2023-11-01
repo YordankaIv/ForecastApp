@@ -41,6 +41,7 @@ import {
 } from '../WeatherTabRoutes/WeatherTabRoutes';
 import 'react-native-url-polyfill/auto';
 import SharedGroupPreferences from 'react-native-shared-group-preferences';
+import {triggerPushNotification} from '../../utils/pushNotifications';
 
 import style from './style';
 
@@ -113,6 +114,12 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
 
     getWeatherConditionId(weatherCondition.weather[0].id);
     const weatherValues = prepareWeatherDetails(weatherCondition);
+
+    await triggerPushNotification(
+      weatherCondition.main.temp,
+      weatherCondition.weather[0].main,
+      metric,
+    );
 
     const firstRoute = routes.find(
       route => route.key === TAB_ROUTE_CURRENT_FORECAST_KEY,

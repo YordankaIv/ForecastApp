@@ -64,3 +64,8 @@ export const TAB_ROUTE_CURRENT_FORECAST_KEY = 'first';
 export const TAB_ROUTE_WEEK_FORECAST_KEY = 'second';
 export const TAB_ROUTE_CURRENT_FORECAST_TITLE = 'Daily';
 export const TAB_ROUTE_WEEK_FORECAST_TITLE = '5-Day';
+
+export const NOTIFICATIONS_CHANNEL_ID = 'weather';
+export const NOTIFICATIONS_CHANNEL_NAME = 'weather channel';
+export const NOTIFICATIONS_TITLE = 'Weather Update';
+export const NOTIFICATIONS_MESSAGE = "Today's weather:";
