@@ -1,11 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {AppState, ImageBackground, SafeAreaView} from 'react-native';
 import {
-  BACKGROUNT_IMAGE_FOG_URI,
-  BACKGROUNT_IMAGE_RAIN_URI,
-  BACKGROUNT_IMAGE_SNOW_URI,
-  BACKGROUNT_IMAGE_STORM_URI,
-  BACKGROUNT_IMAGE_URI,
+  BACKGROUND_IMAGE_FOG_URI,
+  BACKGROUND_IMAGE_RAIN_URI,
+  BACKGROUND_IMAGE_SNOW_URI,
+  BACKGROUND_IMAGE_STORM_URI,
+  BACKGROUND_IMAGE_URI,
   ERROR_LOCATION_TEXT,
 } from '../../utils/constants';
 import {useQuery} from 'react-query';
@@ -20,12 +20,17 @@ import {
 } from '../../utils/utils';
 import {useRefresh} from '../../hooks/common/useRefresh';
 import {WeatherConditionIds} from '../../utils/weatherConstants';
+import {RouteProp, useFocusEffect, useRoute} from '@react-navigation/native';
 
 import style from './style';
 
 const Home: React.FC = () => {
   const [backgroundImageURI, setBackgroundImageURI] =
-    useState(BACKGROUNT_IMAGE_URI);
+    useState(BACKGROUND_IMAGE_URI);
+  const [location, setLocation] = useState<{lat: number; lon: number}>();
+  const [loading, setLoading] = useState(true);
+  const route: RouteProp<{params: {location: {lat: number; lon: number}}}> =
+    useRoute();
 
   const appState = useRef(AppState.currentState);
 
@@ -45,15 +50,23 @@ const Home: React.FC = () => {
   };
 
   const {
-    isSuccess,
     isError,
-    data: location,
     refetch,
+    data: currentLocation,
     error,
   } = useQuery<GeolocationResponse, Error>({
-    queryKey: 'location',
+    queryKey: 'currentLocation',
     queryFn: getLocation,
   });
+
+  useEffect(() => {
+    if (!route.params && currentLocation) {
+      setLocation({
+        lat: currentLocation.coords.latitude,
+        lon: currentLocation.coords.longitude,
+      });
+    }
+  }, [currentLocation]);
 
   const {refreshing, handleRefresh} = useRefresh(refetch);
 
@@ -76,26 +89,36 @@ const Home: React.FC = () => {
     };
   }, [refetch]);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      setLoading(true);
+      if (route.params) {
+        setLocation(route.params.location);
+      }
+      setTimeout(() => setLoading(false), 2000);
+    }, [route.params]),
+  );
+
   const getWeatherConditionId = (id: number) => {
     switch (id.toString()[0]) {
       case WeatherConditionIds.SUNNY_WEATHER_CONDITION_ID:
-        setBackgroundImageURI(BACKGROUNT_IMAGE_URI);
+        setBackgroundImageURI(BACKGROUND_IMAGE_URI);
         break;
       case WeatherConditionIds.FOGGY_WEATHER_CONDITION_ID:
-        setBackgroundImageURI(BACKGROUNT_IMAGE_FOG_URI);
+        setBackgroundImageURI(BACKGROUND_IMAGE_FOG_URI);
         break;
       case WeatherConditionIds.SNOWY_WEATHER_CONDITION_ID:
-        setBackgroundImageURI(BACKGROUNT_IMAGE_SNOW_URI);
+        setBackgroundImageURI(BACKGROUND_IMAGE_SNOW_URI);
         break;
       case WeatherConditionIds.HEAVY_RAINY_WEATHER_CONDITION_ID:
       case WeatherConditionIds.LIGHT_RAINY_WEATHER_CONDITION_ID:
-        setBackgroundImageURI(BACKGROUNT_IMAGE_RAIN_URI);
+        setBackgroundImageURI(BACKGROUND_IMAGE_RAIN_URI);
         break;
       case WeatherConditionIds.STORM_WEATHER_CONDITION_ID:
-        setBackgroundImageURI(BACKGROUNT_IMAGE_STORM_URI);
+        setBackgroundImageURI(BACKGROUND_IMAGE_STORM_URI);
         break;
       default:
-        setBackgroundImageURI(BACKGROUNT_IMAGE_URI);
+        setBackgroundImageURI(BACKGROUND_IMAGE_URI);
     }
   };
 
@@ -112,14 +135,11 @@ const Home: React.FC = () => {
             errorText={error ? error.message : ERROR_LOCATION_TEXT}
           />
         )}
-        {isSuccess && (
+        {!loading && location && (
           <WeatherComponent
             handleRefresh={handleRefresh}
             getWeatherConditionId={getWeatherConditionId}
-            location={{
-              lat: location.coords.latitude,
-              lon: location.coords.longitude,
-            }}
+            location={location}
             refreshing={refreshing}
           />
         )}

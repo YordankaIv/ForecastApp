@@ -15,9 +15,17 @@ const style = StyleSheet.create({
     flex: 1,
     marginHorizontal: horizontalScale(24),
   },
-  container: {
+  currentDateContainer: {
     marginHorizontal: horizontalScale(24),
-    marginTop: verticalScale(40),
+    marginTop: verticalScale(60),
+    height: verticalScale(70),
+  },
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 20,
   },
   stickyHeader: {
     marginHorizontal: horizontalScale(24),
@@ -30,16 +38,13 @@ const style = StyleSheet.create({
   },
   dateAndTime: {
     fontFamily: 'Raleway',
-    fontSize: scaleFontSize(20),
+    fontSize: scaleFontSize(18),
     fontWeight: '600',
     color: Colors.white,
     textShadowColor: Colors.white,
     textShadowOffset: {width: 1, height: 1},
     textShadowRadius: 2,
-    paddingVertical: verticalScale(12),
-    marginBottom: verticalScale(20),
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.white,
+    marginBottom: verticalScale(50),
   },
   errorContainer: {
     marginVertical: verticalScale(30),

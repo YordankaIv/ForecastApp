@@ -40,19 +40,20 @@ const WeatherChartForecast: React.FC<WeatherWeekForecastProps> = ({
   const screenWidth = Dimensions.get('window').width;
 
   const prepareChartData = useCallback(async () => {
+    const newData = {...data};
     weekForecast.forEach(weekday => {
       if (weekday.short_label) {
-        data.labels.push(weekday.short_label);
+        newData.labels.push(weekday.short_label);
       }
 
       if (weekday.temp) {
-        data.datasets[0].data.push(+weekday.temp.replace(/\D/g, ''));
+        newData.datasets[0].data.push(+weekday.temp.replace(/\D/g, ''));
       }
     });
 
-    setData(data);
+    setData(newData);
     setLoading(false);
-  }, [data, weekForecast]);
+  }, []);
 
   useEffect(() => {
     prepareChartData();

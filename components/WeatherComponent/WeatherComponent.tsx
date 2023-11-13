@@ -7,6 +7,8 @@ import {
   ERROR_FORECAST_TEXT,
   FAHRENHEIT_UNIT,
   FORECAST,
+  MENU_LOCATIONS_OPTION,
+  MENU_LOGOUT_OPTION,
   MIDDLE_OF_DAY_FORMAT,
   M_S_METRIC,
   OPEN_WEATHER_MAP_APP_ID,
@@ -46,6 +48,15 @@ import {
 import 'react-native-url-polyfill/auto';
 import SharedGroupPreferences from 'react-native-shared-group-preferences';
 import {triggerPushNotification} from '../../utils/pushNotifications';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faBars} from '@fortawesome/free-solid-svg-icons';
+import {Colors} from '../../utils/colorsConstants';
+import {resetToInitialState} from '../../redux/reducers/User';
+import {logout} from '../../api/user';
+import {useDispatch} from 'react-redux';
+import PopUpMenu from '../Menu/Menu';
+import {useNavigation} from '@react-navigation/native';
+import {Routes} from '../../navigation/Routes';
 
 import style from './style';
 
@@ -58,6 +69,8 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
   getWeatherConditionId,
   // handleRefresh,
 }) => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation<{navigate: (props: string) => void}>();
   const [unit, setUnit] = useState(CELSIUS_UNIT);
   const [index, setIndex] = useState(0);
   const [routes, setRoutes] = useState<Array<Record<K, T>>>([
@@ -280,11 +293,41 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
         </View>
       ) : (
         <>
-          <View style={style.container}>
-            <Text style={style.dateAndTime}>
-              {currentDate && moment.unix(currentDate).format(DATE_TIME_FORMAT)}
-            </Text>
+          <View style={style.currentDateContainer}>
+            <View style={style.container}>
+              <PopUpMenu
+                trigger={
+                  <FontAwesomeIcon
+                    icon={faBars}
+                    size={25}
+                    color={Colors.white}
+                  />
+                }
+                options={[
+                  {
+                    text: MENU_LOCATIONS_OPTION,
+                    onSelect: () => {
+                      navigation.navigate(Routes.Locations);
+                    },
+                  },
+                  {
+                    text: MENU_LOGOUT_OPTION,
+                    onSelect: async () => {
+                      await logout();
+                      dispatch(resetToInitialState());
+                    },
+                  },
+                ]}
+              />
+              <View>
+                <Text style={style.dateAndTime}>
+                  {currentDate &&
+                    moment.unix(currentDate).format(DATE_TIME_FORMAT)}
+                </Text>
+              </View>
+            </View>
           </View>
+
           {currentWeatherCondition && (
             <View style={style.stickyHeader}>
               <WeatherHeader weather={currentWeatherCondition} unit={unit} />
