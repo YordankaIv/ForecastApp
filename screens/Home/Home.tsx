@@ -22,7 +22,7 @@ import {useRefresh} from '../../hooks/common/useRefresh';
 import {WeatherConditionIds} from '../../utils/weatherConstants';
 import {RouteProp, useFocusEffect, useRoute} from '@react-navigation/native';
 
-import style from './style';
+import globalStyle from '../../assets/styles/globalStyle';
 
 const Home: React.FC = () => {
   const [backgroundImageURI, setBackgroundImageURI] =
@@ -123,13 +123,13 @@ const Home: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={style.flex}>
+    <SafeAreaView style={globalStyle.flex}>
       <ImageBackground
         source={{
           uri: backgroundImageURI,
         }}
         resizeMode={'cover'}
-        style={style.image}>
+        style={globalStyle.image}>
         {isError && (
           <ErrorComponent
             errorText={error ? error.message : ERROR_LOCATION_TEXT}

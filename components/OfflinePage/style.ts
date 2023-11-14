@@ -1,13 +1,9 @@
 import {StyleSheet} from 'react-native';
-import {
-  horizontalScale,
-  scaleFontSize,
-  verticalScale,
-} from '../../assets/styles/scaling';
+import {horizontalScale, verticalScale} from '../../assets/styles/scaling';
 import {Colors} from '../../utils/colorsConstants';
 
 const style = StyleSheet.create({
-  flex: {
+  page: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -18,15 +14,9 @@ const style = StyleSheet.create({
     justifyContent: 'center',
   },
   header: {
-    fontFamily: 'Raleway',
-    fontSize: scaleFontSize(25),
-    fontWeight: '600',
     color: Colors.black,
   },
   description: {
-    fontFamily: 'Raleway',
-    fontSize: scaleFontSize(15),
-    fontWeight: '400',
     color: Colors.black,
     marginTop: verticalScale(10),
     textAlign: 'center',
@@ -46,9 +36,6 @@ const style = StyleSheet.create({
     borderRadius: horizontalScale(50),
   },
   title: {
-    fontFamily: 'Raleway',
-    fontSize: scaleFontSize(20),
-    fontWeight: '500',
     color: Colors.lightBlue,
     textAlign: 'center',
   },

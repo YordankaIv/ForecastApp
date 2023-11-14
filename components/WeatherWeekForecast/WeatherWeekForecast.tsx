@@ -20,6 +20,7 @@ import {
 } from '../../utils/constants';
 
 import style from './style';
+import globalStyle from '../../assets/styles/globalStyle';
 
 const WeatherWeekForecast: React.FC<WeatherWeekForecastProps> = ({
   weekForecast,
@@ -102,9 +103,17 @@ const WeatherWeekForecast: React.FC<WeatherWeekForecastProps> = ({
                     resizeMode={'cover'}
                     style={style.icon}
                   />
-                  <Text style={style.weatherDetails}>{day.date}</Text>
+                  <Text
+                    style={[
+                      style.weatherDetails,
+                      globalStyle.RalewayFont,
+                      globalStyle.normalWeight,
+                      globalStyle.SSize,
+                    ]}>
+                    {day.date}
+                  </Text>
                 </View>
-                <View style={[style.weekDetailContainer, style.smallDataSize]}>
+                <View style={style.smallDataSize}>
                   <FontAwesomeIcon
                     icon={faDroplet}
                     size={13}

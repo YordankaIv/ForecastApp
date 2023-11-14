@@ -26,6 +26,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Nav} from '../../types/CommonTypes';
 
 import style from './style';
+import globalStyle from '../../assets/styles/globalStyle';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -35,13 +36,13 @@ const Login: React.FC = () => {
   const navigation = useNavigation<Nav>();
 
   return (
-    <SafeAreaView style={style.flex}>
+    <SafeAreaView style={globalStyle.flex}>
       <ImageBackground
         source={{
           uri: BACKGROUND_IMAGE_LOGIN_URI,
         }}
         resizeMode={'cover'}
-        style={style.image}>
+        style={globalStyle.image}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={style.container}>
@@ -63,7 +64,7 @@ const Login: React.FC = () => {
               />
             </View>
           </View>
-          {error.length > 0 && <Text style={style.error}>{error}</Text>}
+          {error.length > 0 && <Text style={globalStyle.error}>{error}</Text>}
           <View style={style.loginButton}>
             <Button
               title={LOGIN_BUTTON_TITLE}
@@ -83,7 +84,13 @@ const Login: React.FC = () => {
           <Pressable
             style={style.registrationButton}
             onPress={() => navigation.navigate(Routes.Registration)}>
-            <Text style={style.registrationLabel}>
+            <Text
+              style={[
+                style.registrationLabel,
+                globalStyle.RalewayFont,
+                globalStyle.boldWeight,
+                globalStyle.MSize,
+              ]}>
               {REGISTRATION_BUTTON_LABEL}
             </Text>
           </Pressable>

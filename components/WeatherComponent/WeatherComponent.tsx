@@ -59,6 +59,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Routes} from '../../navigation/Routes';
 
 import style from './style';
+import globalStyle from '../../assets/styles/globalStyle';
 
 const group = 'group.streak';
 const SharedStorage = NativeModules.SharedStorage;
@@ -320,7 +321,13 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
                 ]}
               />
               <View>
-                <Text style={style.dateAndTime}>
+                <Text
+                  style={[
+                    style.dateAndTime,
+                    globalStyle.RalewayFont,
+                    globalStyle.boldWeight,
+                    globalStyle.LSize,
+                  ]}>
                   {currentDate &&
                     moment.unix(currentDate).format(DATE_TIME_FORMAT)}
                 </Text>

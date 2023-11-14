@@ -7,6 +7,7 @@ import {faWarning} from '@fortawesome/free-solid-svg-icons';
 import {Colors} from '../../utils/colorsConstants';
 
 import style from './style';
+import globalStyle from '../../assets/styles/globalStyle';
 
 const ErrorComponent: React.FC<ErrorComponentProps> = ({
   errorText,
@@ -14,10 +15,26 @@ const ErrorComponent: React.FC<ErrorComponentProps> = ({
 }) => (
   <View style={style.errorContainer}>
     <FontAwesomeIcon icon={faWarning} size={30} color={Colors.red} />
-    <Text style={style.error}>{errorText}</Text>
+    <Text
+      style={[
+        style.error,
+        globalStyle.RalewayFont,
+        globalStyle.boldWeight,
+        globalStyle.XLSize,
+      ]}>
+      {errorText}
+    </Text>
     {onRefreshPress && (
       <Pressable onPress={() => onRefreshPress()} style={style.button}>
-        <Text style={style.title}>{REFRESH_BUTTON}</Text>
+        <Text
+          style={[
+            style.title,
+            globalStyle.RalewayFont,
+            globalStyle.mediumWeight,
+            globalStyle.MSize,
+          ]}>
+          {REFRESH_BUTTON}
+        </Text>
       </Pressable>
     )}
   </View>

@@ -25,6 +25,7 @@ import {getData, saveData} from '../../utils/firebaseUtils';
 import {useNavigation} from '@react-navigation/native';
 
 import style from './style';
+import globalStyle from '../../assets/styles/globalStyle';
 
 const Locations: React.FC = () => {
   const navigation = useNavigation<Nav>();
@@ -85,13 +86,13 @@ const Locations: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={style.flex}>
+    <SafeAreaView style={globalStyle.flex}>
       <ImageBackground
         source={{
           uri: BACKGROUND_IMAGE_LOGIN_URI,
         }}
         resizeMode={'cover'}
-        style={style.image}>
+        style={globalStyle.image}>
         <View style={style.autocompleteContainer}>
           <Autocomplete
             placeholder={LOCATION_FIELD_PLACEHOLDER}
@@ -105,7 +106,15 @@ const Locations: React.FC = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={style.container}>
           <View>
-            <Text style={style.locationsTitle}>{MENU_LOCATIONS_OPTION}</Text>
+            <Text
+              style={[
+                style.darkWhiteColor,
+                globalStyle.RalewayFont,
+                globalStyle.bolderWeight,
+                globalStyle.LSize,
+              ]}>
+              {MENU_LOCATIONS_OPTION}
+            </Text>
             {locations &&
               locations.map((savedLocation, index) => (
                 <Pressable
@@ -116,7 +125,13 @@ const Locations: React.FC = () => {
                     })
                   }
                   style={style.locationContainer}>
-                  <Text style={style.location}>
+                  <Text
+                    style={[
+                      style.darkWhiteColor,
+                      globalStyle.RalewayFont,
+                      globalStyle.boldWeight,
+                      globalStyle.MSize,
+                    ]}>
                     {savedLocation.name}, {savedLocation.country}
                   </Text>
                 </Pressable>

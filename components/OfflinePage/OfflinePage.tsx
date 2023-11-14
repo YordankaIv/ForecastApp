@@ -10,6 +10,7 @@ import {
 import {useNetInfo} from '@react-native-community/netinfo';
 
 import style from './style';
+import globalStyle from '../../assets/styles/globalStyle';
 
 const OfflinePage: React.FC = () => {
   const netInfo = useNetInfo();
@@ -23,7 +24,7 @@ const OfflinePage: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={style.flex}>
+    <SafeAreaView style={style.page}>
       <View style={style.container}>
         <>
           <Image
@@ -32,12 +33,36 @@ const OfflinePage: React.FC = () => {
           />
         </>
         <View style={style.textContainer}>
-          <Text style={style.header}>{OFFLINE_PAGE_HEADER}</Text>
-          <Text style={style.description}>{OFFLINE_PAGE_DESCRIPTION}</Text>
+          <Text
+            style={[
+              style.header,
+              globalStyle.RalewayFont,
+              globalStyle.boldWeight,
+              globalStyle.XLSize,
+            ]}>
+            {OFFLINE_PAGE_HEADER}
+          </Text>
+          <Text
+            style={[
+              style.description,
+              globalStyle.RalewayFont,
+              globalStyle.normalWeight,
+              globalStyle.MSize,
+            ]}>
+            {OFFLINE_PAGE_DESCRIPTION}
+          </Text>
         </View>
         <>
           <Pressable onPress={() => checkConnection()} style={style.button}>
-            <Text style={style.title}>{OFFLINE_PAGE_BUTTON}</Text>
+            <Text
+              style={[
+                style.title,
+                globalStyle.RalewayFont,
+                globalStyle.mediumWeight,
+                globalStyle.LSize,
+              ]}>
+              {OFFLINE_PAGE_BUTTON}
+            </Text>
           </Pressable>
         </>
       </View>

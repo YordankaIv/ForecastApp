@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, TextInput} from 'react-native';
 import style from './style';
 import {InputProps} from '../../types/CommonTypes';
+import globalStyle from '../../assets/styles/globalStyle';
 
 const Input: React.FC<InputProps> = ({
   label,
@@ -13,7 +14,15 @@ const Input: React.FC<InputProps> = ({
   const [value, setValue] = useState('');
   return (
     <View>
-      <Text style={style.label}>{label}</Text>
+      <Text
+        style={[
+          style.label,
+          globalStyle.RalewayFont,
+          globalStyle.normalWeight,
+          globalStyle.SSize,
+        ]}>
+        {label}
+      </Text>
       <TextInput
         secureTextEntry={secureTextEntry}
         keyboardType={keyboardType}

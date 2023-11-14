@@ -1,19 +1,8 @@
 import {StyleSheet} from 'react-native';
-import {
-  horizontalScale,
-  scaleFontSize,
-  verticalScale,
-} from '../../assets/styles/scaling';
+import {horizontalScale, verticalScale} from '../../assets/styles/scaling';
 import {Colors} from '../../utils/colorsConstants';
 
 const style = StyleSheet.create({
-  image: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  flex: {
-    flex: 1,
-  },
   container: {
     marginHorizontal: horizontalScale(24),
     flex: 1,
@@ -30,16 +19,7 @@ const style = StyleSheet.create({
     paddingHorizontal: horizontalScale(10),
     marginVertical: verticalScale(5),
   },
-  locationsTitle: {
-    fontFamily: 'Raleway',
-    fontSize: scaleFontSize(18),
-    fontWeight: '700',
-    color: Colors.darkWhite,
-  },
-  location: {
-    fontFamily: 'Raleway',
-    fontSize: scaleFontSize(15),
-    fontWeight: '600',
+  darkWhiteColor: {
     color: Colors.darkWhite,
   },
 });

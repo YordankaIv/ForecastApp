@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {scaleFontSize, verticalScale} from '../../assets/styles/scaling';
+import {verticalScale} from '../../assets/styles/scaling';
 import {Colors} from '../../utils/colorsConstants';
 
 const style = StyleSheet.create({
@@ -12,10 +12,7 @@ const style = StyleSheet.create({
     alignItems: 'center',
   },
   location: {
-    fontFamily: 'Raleway',
-    fontSize: scaleFontSize(17),
     marginRight: verticalScale(5),
-    fontWeight: '700',
     color: Colors.white,
     textShadowColor: Colors.white,
     textShadowOffset: {width: 0, height: 0},
@@ -26,9 +23,6 @@ const style = StyleSheet.create({
     marginTop: verticalScale(5),
   },
   tempDetails: {
-    fontFamily: 'Raleway',
-    fontSize: scaleFontSize(14),
-    fontWeight: '700',
     color: Colors.white,
     textShadowColor: Colors.white,
     textShadowOffset: {width: 0, height: 0},
@@ -40,16 +34,10 @@ const style = StyleSheet.create({
     zIndex: 1,
   },
   changeUnit: {
-    fontFamily: 'Raleway',
-    fontSize: scaleFontSize(16),
-    fontWeight: '700',
     color: Colors.lightBlue,
     textShadowColor: Colors.black,
     textShadowOffset: {width: 0, height: 0},
     textShadowRadius: 2,
-  },
-  errorContainer: {
-    marginVertical: verticalScale(30),
   },
 });
 

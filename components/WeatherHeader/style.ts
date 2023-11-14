@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {horizontalScale, scaleFontSize} from '../../assets/styles/scaling';
+import {horizontalScale} from '../../assets/styles/scaling';
 import {Colors} from '../../utils/colorsConstants';
 
 const style = StyleSheet.create({
@@ -8,9 +8,6 @@ const style = StyleSheet.create({
     justifyContent: 'space-between',
   },
   currentTemperature: {
-    fontFamily: 'Raleway',
-    fontSize: scaleFontSize(50),
-    fontWeight: '600',
     color: Colors.white,
     textShadowColor: Colors.white,
     textShadowOffset: {width: 0, height: 0},
@@ -26,9 +23,6 @@ const style = StyleSheet.create({
     width: horizontalScale(100),
   },
   currentWeather: {
-    fontFamily: 'Raleway',
-    fontSize: scaleFontSize(20),
-    fontWeight: '400',
     color: Colors.white,
     textShadowColor: Colors.white,
     textShadowOffset: {width: 0, height: 0},

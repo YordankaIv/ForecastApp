@@ -26,6 +26,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Nav} from '../../types/CommonTypes';
 
 import style from './style';
+import globalStyle from '../../assets/styles/globalStyle';
 
 const Registration: React.FC = () => {
   const [name, setName] = useState('');
@@ -36,13 +37,13 @@ const Registration: React.FC = () => {
   const navigation = useNavigation<Nav>();
 
   return (
-    <SafeAreaView style={style.flex}>
+    <SafeAreaView style={globalStyle.flex}>
       <ImageBackground
         source={{
           uri: BACKGROUND_IMAGE_LOGIN_URI,
         }}
         resizeMode={'cover'}
-        style={style.image}>
+        style={globalStyle.image}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={style.container}>
@@ -71,8 +72,10 @@ const Registration: React.FC = () => {
               />
             </View>
           </View>
-          {error.length > 0 && <Text style={style.error}>{error}</Text>}
-          {success.length > 0 && <Text style={style.success}>{success}</Text>}
+          {error.length > 0 && <Text style={globalStyle.error}>{error}</Text>}
+          {success.length > 0 && (
+            <Text style={globalStyle.success}>{success}</Text>
+          )}
           <View>
             <Button
               isDisabled={

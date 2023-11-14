@@ -1,9 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {
-  horizontalScale,
-  scaleFontSize,
-  verticalScale,
-} from '../../assets/styles/scaling';
+import {horizontalScale, verticalScale} from '../../assets/styles/scaling';
 import {Colors} from '../../utils/colorsConstants';
 
 const style = StyleSheet.create({
@@ -16,9 +12,6 @@ const style = StyleSheet.create({
     borderRadius: horizontalScale(50),
   },
   title: {
-    fontFamily: 'Raleway',
-    fontSize: scaleFontSize(16),
-    fontWeight: '500',
     lineHeight: 19,
     color: Colors.lightBlue,
     textShadowColor: Colors.lightBlue,
@@ -27,9 +20,6 @@ const style = StyleSheet.create({
     textAlign: 'center',
   },
   error: {
-    fontFamily: 'Raleway',
-    fontSize: scaleFontSize(30),
-    fontWeight: '600',
     textAlign: 'center',
     color: Colors.red,
     marginTop: verticalScale(15),

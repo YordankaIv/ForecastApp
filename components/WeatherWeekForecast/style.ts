@@ -1,9 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {
-  horizontalScale,
-  scaleFontSize,
-  verticalScale,
-} from '../../assets/styles/scaling';
+import {horizontalScale, verticalScale} from '../../assets/styles/scaling';
 import {Colors} from '../../utils/colorsConstants';
 
 const style = StyleSheet.create({
@@ -34,7 +30,6 @@ const style = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: horizontalScale(10),
   },
-  weekDetailContainer: {},
   sortToolsContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -52,9 +47,6 @@ const style = StyleSheet.create({
     gap: 10,
   },
   weatherDetails: {
-    fontFamily: 'Raleway',
-    fontSize: scaleFontSize(14),
-    fontWeight: '400',
     color: Colors.white,
   },
   icon: {
