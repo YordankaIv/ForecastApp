@@ -5,17 +5,17 @@ import OfflinePage from '../OfflinePage/OfflinePage';
 const ScreenWrapper = (WrappedComponent: React.FC) => {
   const netInfo = useNetInfo();
 
-  return (props: T) => {
-    return (
-      <>
-        {netInfo.isConnected && netInfo.isInternetReachable ? (
-          <WrappedComponent {...props} />
-        ) : (
-          <OfflinePage />
-        )}
-      </>
-    );
-  };
+  // return () => {
+  return (
+    <>
+      {netInfo.isConnected && netInfo.isInternetReachable ? (
+        <WrappedComponent />
+      ) : (
+        <OfflinePage />
+      )}
+    </>
+  );
+  // };
 };
 
 export default ScreenWrapper;

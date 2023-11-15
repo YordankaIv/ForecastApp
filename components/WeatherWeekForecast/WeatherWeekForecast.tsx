@@ -3,11 +3,11 @@ import {Image, Pressable, Text, View} from 'react-native';
 import {Forecast, WeatherWeekForecastProps} from '../../types/WeatherTypes';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {Colors} from '../../utils/colorsConstants';
+import LoadingComponent from '../LoadingComponent/LoadingComponent';
 import {
   faChevronDown,
   faChevronUp,
   faDroplet,
-  faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   ASC_ORDER,
@@ -134,9 +134,7 @@ const WeatherWeekForecast: React.FC<WeatherWeekForecastProps> = ({
           </>
         </>
       ) : (
-        <View style={style.loadingContainer}>
-          <FontAwesomeIcon icon={faSpinner} size={25} color={Colors.white} />
-        </View>
+        <LoadingComponent />
       )}
     </View>
   );

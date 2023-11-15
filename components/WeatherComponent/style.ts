@@ -26,12 +26,6 @@ const style = StyleSheet.create({
   stickyHeader: {
     marginHorizontal: horizontalScale(24),
   },
-  indicatorContainer: {
-    flex: 1,
-    height: verticalScale(300),
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   dateAndTime: {
     color: Colors.white,
     textShadowColor: Colors.white,

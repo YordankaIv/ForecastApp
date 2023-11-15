@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import moment from 'moment';
-import {ActivityIndicator, NativeModules, Text, View} from 'react-native';
+import {NativeModules, Text, View} from 'react-native';
 import {
   CELSIUS_UNIT,
   DATE_TIME_FORMAT,
@@ -57,6 +57,7 @@ import {useDispatch} from 'react-redux';
 import PopUpMenu from '../Menu/Menu';
 import {useNavigation} from '@react-navigation/native';
 import {Routes} from '../../navigation/Routes';
+import LoadingComponent from '../LoadingComponent/LoadingComponent';
 
 import style from './style';
 import globalStyle from '../../assets/styles/globalStyle';
@@ -287,9 +288,7 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({
               }}
             />
           ) : (
-            <View style={style.indicatorContainer}>
-              <ActivityIndicator size="large" />
-            </View>
+            <LoadingComponent />
           )}
         </View>
       ) : (

@@ -1,11 +1,8 @@
 import React from 'react';
 import {ScrollView, View} from 'react-native';
-import {weatherDetailsConstants} from '../../utils/weatherConstants';
-import WeatherItem from '../WeatherItem/WeatherItem';
 import WeatherWeekForecast from '../WeatherWeekForecast/WeatherWeekForecast';
-
-import style from './style';
 import WeatherChartForecast from '../WeatherChartForecast/WeatherChartForecast';
+import WeatherDetails from '../WeatherDetails/WeatherDetails';
 
 export const RouteWrapper = (
   WrappedComponent: React.FC<{route: {content: T}}>,
@@ -24,19 +21,8 @@ export const RouteWrapper = (
 };
 
 export const FirstRoute = ({route}: {route: {content: T}}) => (
-  <View style={style.weatherDescriptionDetails}>
-    {weatherDetailsConstants.map((detail, index) => (
-      <View key={index} style={style.weatherDescription}>
-        {detail.map((description, detailIndex) => (
-          <WeatherItem
-            key={detailIndex + 'detail'}
-            icon={description.icon}
-            label={description.label}
-            value={route.content[description.label.toLowerCase()]}
-          />
-        ))}
-      </View>
-    ))}
+  <View>
+    {route.content && <WeatherDetails weatherDetails={route.content} />}
   </View>
 );
 

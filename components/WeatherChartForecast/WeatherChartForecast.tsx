@@ -4,6 +4,7 @@ import {WeatherWeekForecastProps} from '../../types/WeatherTypes';
 import {LineChart} from 'react-native-chart-kit';
 import {Colors} from '../../utils/colorsConstants';
 import {CHART_LEGEND_LABEL} from '../../utils/constants';
+import LoadingComponent from '../LoadingComponent/LoadingComponent';
 
 const WeatherChartForecast: React.FC<WeatherWeekForecastProps> = ({
   weekForecast,
@@ -61,13 +62,15 @@ const WeatherChartForecast: React.FC<WeatherWeekForecastProps> = ({
 
   return (
     <View>
-      {!loading && data.datasets[0].data && (
+      {!loading && data.datasets[0].data ? (
         <LineChart
           data={data}
           width={screenWidth}
           height={250}
           chartConfig={chartConfig}
         />
+      ) : (
+        <LoadingComponent />
       )}
     </View>
   );

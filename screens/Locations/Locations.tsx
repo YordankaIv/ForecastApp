@@ -23,6 +23,7 @@ import {Routes} from '../../navigation/Routes';
 import {AutocompleteOption, Nav} from '../../types/CommonTypes';
 import {getData, saveData} from '../../utils/firebaseUtils';
 import {useNavigation} from '@react-navigation/native';
+import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
 import style from './style';
 import globalStyle from '../../assets/styles/globalStyle';
@@ -115,7 +116,7 @@ const Locations: React.FC = () => {
               ]}>
               {MENU_LOCATIONS_OPTION}
             </Text>
-            {locations &&
+            {locations.length ? (
               locations.map((savedLocation, index) => (
                 <Pressable
                   key={index}
@@ -135,7 +136,10 @@ const Locations: React.FC = () => {
                     {savedLocation.name}, {savedLocation.country}
                   </Text>
                 </Pressable>
-              ))}
+              ))
+            ) : (
+              <LoadingComponent />
+            )}
           </View>
         </ScrollView>
       </ImageBackground>

@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {View, Text, TextInput} from 'react-native';
-import style from './style';
 import {InputProps} from '../../types/CommonTypes';
+
+import style from './style';
 import globalStyle from '../../assets/styles/globalStyle';
 
 const Input: React.FC<InputProps> = ({

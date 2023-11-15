@@ -21,6 +21,7 @@ import {
 import {useRefresh} from '../../hooks/common/useRefresh';
 import {WeatherConditionIds} from '../../utils/weatherConstants';
 import {RouteProp, useFocusEffect, useRoute} from '@react-navigation/native';
+import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
 import globalStyle from '../../assets/styles/globalStyle';
 
@@ -135,13 +136,15 @@ const Home: React.FC = () => {
             errorText={error ? error.message : ERROR_LOCATION_TEXT}
           />
         )}
-        {!loading && location && (
+        {!loading && location ? (
           <WeatherComponent
             handleRefresh={handleRefresh}
             getWeatherConditionId={getWeatherConditionId}
             location={location}
             refreshing={refreshing}
           />
+        ) : (
+          <LoadingComponent />
         )}
       </ImageBackground>
     </SafeAreaView>

@@ -6,10 +6,6 @@ const style = StyleSheet.create({
   weekWeatherContainer: {
     marginVertical: verticalScale(10),
   },
-  loadingContainer: {
-    marginTop: verticalScale(50),
-    alignItems: 'center',
-  },
   dayContainer: {
     flexDirection: 'row',
     gap: 10,
